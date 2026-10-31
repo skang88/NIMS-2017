@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIMS 핵심 재난지휘 관리원칙 Q-소팅(Q-Sorting) 인터랙티브 연구 도구</title>
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --secondary: #0f172a;
+      --disagree-bg: #fef2f2;
+      --disagree-border: #f87171;
+      --disagree-text: #b91c1c;
+      --neutral-bg: #f8fafc;
+      --neutral-border: #94a3b8;
+      --neutral-text: #334155;
+      --agree-bg: #f0fdf4;
+      --agree-border: #4ade80;
+      --agree-text: #15803d;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--gray-800);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1560px;
+      width: 98%;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: white;
+      padding: 30px 40px;
+      border-bottom: 4px solid #3b82f6;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+
+    /* Stepper Bar */
+    .stepper {
+      display: flex;
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .step-item {
+      flex: 1;
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gray-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .step-item.active {
+      background: #ffffff;
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .step-item.completed {
+      color: #059669;
+    }
+
+    .step-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .step-item.active .step-number {
+      background: var(--primary);
+    }
+
+    .step-item.completed .step-number {
+      background: #059669;
+    }
+
+    /* Main Content Pages */
+    .page-section {
+      padding: 40px;
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    .guide-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 18px 24px;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+      color: #1e3a8a;
+    }
+
+    /* Step 1: Info Form */
+    .form-group {
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--gray-700);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    /* Step 2: 3-Pile Rough Sorting */
+    .card-deck-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .current-card-box {
+      width: 100%;
+      max-width: 680px;
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 28px 32px;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.12);
+      text-align: center;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .current-card-id {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .current-card-dim {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+
+    .current-card-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-800);
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+
+    .current-card-mechanism {
+      font-size: 0.88rem;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .sorting-buckets {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .bucket {
+      border: 2px dashed;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bucket:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .bucket.disagree {
+      background: var(--disagree-bg);
+      border-color: var(--disagree-border);
+      color: var(--disagree-text);
+    }
+
+    .bucket.neutral {
+      background: var(--neutral-bg);
+      border-color: var(--neutral-border);
+      color: var(--neutral-text);
+    }
+
+    .bucket.agree {
+      background: var(--agree-bg);
+      border-color: var(--agree-border);
+      color: var(--agree-text);
+    }
+
+    .bucket-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bucket-count {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 8px;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.8);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 5px;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Step 3: Dual-Panel Side-by-Side Workspace */
+    .pyramid-dual-workspace {
+      display: grid;
+      grid-template-columns: minmax(760px, 1fr) 440px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1380px) {
+      .pyramid-dual-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pyramid-left-panel {
+      background: #ffffff;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .statement-right-panel {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px;
+      position: sticky;
+      top: 15px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
+
+    .right-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .right-panel-header h4 {
+      font-size: 1rem;
+      color: var(--secondary);
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .unassigned-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .unassigned-badge.complete {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .right-filter-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab-btn {
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--gray-300);
+      background: white;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--gray-700);
+      transition: all 0.15s;
+    }
+
+    .filter-tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .statement-card-list {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    /* Individual Statement Card in Right Panel */
+    .right-statement-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      cursor: grab;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .right-statement-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 3px 10px rgba(37,99,235,0.12);
+      transform: translateY(-1px);
+    }
+
+    .right-statement-card.placed {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      opacity: 0.85;
+    }
+
+    .right-statement-card .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .right-statement-card .card-q-no {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .right-statement-card .card-full-text {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .right-statement-card .card-mech-text {
+      font-size: 0.76rem;
+      color: #0369a1;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .quick-assign-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--gray-200);
+    }
+
+    .quick-assign-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-right: 2px;
+    }
+
+    .quick-score-btn {
+      padding: 2px 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      border: 1px solid var(--gray-300);
+      background: white;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .quick-score-btn.neg { color: #b91c1c; border-color: #fca5a5; background: #fff5f5; }
+    .quick-score-btn.zero { color: #475569; border-color: #cbd5e1; background: #f8fafc; }
+    .quick-score-btn.pos { color: #15803d; border-color: #86efac; background: #f0fdf4; }
+
+    .quick-score-btn:hover:not(:disabled) {
+      transform: scale(1.08);
+      font-weight: 800;
+    }
+
+    /* 배치가 불가능한 경우 (정원 초과) 비활성화 스타일 */
+    .quick-score-btn:disabled,
+    .quick-score-btn.disabled {
+      opacity: 0.28 !important;
+      cursor: not-allowed !important;
+      background: #f1f5f9 !important;
+      color: #94a3b8 !important;
+      border-color: #e2e8f0 !important;
+      pointer-events: none !important;
+      text-decoration: line-through;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    /* 현재 배치된 점수 버튼 하이라이트 */
+    .quick-score-btn.active {
+      font-weight: 800;
+      outline: 2px solid #2563eb;
+      outline-offset: 1px;
+      box-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-unassign-card {
+      margin-left: auto;
+      padding: 2px 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      border: 1px solid #f87171;
+      background: #fef2f2;
+      color: #b91c1c;
+      cursor: pointer;
+    }
+
+    /* 토스트 알림창 스타일 (부드러운 피드백용) */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .toast-msg {
+      background: rgba(30, 41, 59, 0.95);
+      color: white;
+      padding: 11px 22px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      animation: toastFadeIn 0.22s ease-out forwards;
+    }
+
+    .toast-msg.warn {
+      background: rgba(185, 28, 28, 0.95);
+    }
+
+    .toast-msg.success {
+      background: rgba(22, 101, 52, 0.95);
+    }
+
+    .toast-msg.fade-out {
+      animation: toastFadeOut 0.25s ease-in forwards;
+    }
+
+    @keyframes toastFadeIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes toastFadeOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-12px) scale(0.96); }
+    }
+
+    .grid-slot.full-drop-blocked {
+      border-color: #f87171 !important;
+      background: #fef2f2 !important;
+      cursor: not-allowed !important;
+    }
+
+    /* Pyramid Grid Table */
+    .pyramid-grid-wrapper {
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .pyramid-grid {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(80px, 1fr));
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .pyramid-column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .col-header {
+      width: 100%;
+      text-align: center;
+      padding: 8px 2px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .col-header.neg { background: #fee2e2; color: #991b1b; }
+    .col-header.zero { background: #f1f5f9; color: #334155; }
+    .col-header.pos { background: #dcfce7; color: #166534; }
+
+    .col-quota {
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: block;
+      margin-top: 2px;
+      color: #64748b;
+    }
+
+    .grid-slot {
+      width: 100%;
+      height: 72px;
+      border: 2px dashed var(--gray-300);
+      border-radius: 6px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      font-size: 0.72rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .grid-slot.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .grid-slot.filled {
+      border-style: solid;
+      border-color: var(--gray-300);
+    }
+
+    .slot-card {
+      width: 100%;
+      height: 100%;
+      background: #f8fafc;
+      border-radius: 4px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: grab;
+      font-weight: 600;
+      overflow: hidden;
+      line-height: 1.25;
+      font-size: 0.72rem;
+      position: relative;
+    }
+
+    .slot-card .card-id {
+      font-weight: 800;
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+    }
+
+    .slot-card .card-snippet {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    /* Actions */
+    .btn-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      border-top: 1px solid var(--gray-200);
+      padding-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-300);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Card Details Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 550px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .kenq-export-box {
+      width: 100%;
+      height: 120px;
+      font-family: monospace;
+      padding: 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 0.9rem;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    <div>
+      <h1><i class="fa-solid fa-layer-group"></i> NIMS 핵심 재난지휘 관리원칙 Q-소팅(Q-Sorting) 연구 도구</h1>
+      <p>재난관리학과 「현장지휘론」 수강생 집단의 의미구성(Sensemaking) 주관성 분석 (P-Sample N=16)</p>
+    </div>
+    <div>
+      <button class="btn btn-secondary" style="background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.35); font-size: 0.9rem;" onclick="openAggregatorModal()">
+        <i class="fa-solid fa-folder-tree"></i> 📊 연구자 집계 관리자 (16인 JSON 취합)
+      </button>
+    </div>
+  </header>
+
+  <!-- Step Bar -->
+  <div class="stepper">
+    <div class="step-item active" id="step-nav-1">
+      <span class="step-number">1</span>
+      <span>기본정보 (P-표본)</span>
+    </div>
+    <div class="step-item" id="step-nav-2">
+      <span class="step-number">2</span>
+      <span>1단계 3분류 (대분류)</span>
+    </div>
+    <div class="step-item" id="step-nav-3">
+      <span class="step-number">3</span>
+      <span>2단계 피라미드 배치 (강제분포)</span>
+    </div>
+    <div class="step-item" id="step-nav-4">
+      <span class="step-number">4</span>
+      <span>심층 인터뷰 & 제출</span>
+    </div>
+  </div>
+
+  <!-- PAGE 1: 기본 정보 입력 -->
+  <div class="page-section active" id="page-1">
+    <div class="guide-box">
+      <strong><i class="fa-solid fa-circle-info"></i> 연구 참여 안내:</strong><br/>
+      본 조사는 NIMS 14대 핵심 현장지휘 관리원칙의 작동기제에 대한 방재 전문가 집단의 주관적 신념체계를 분석하기 위해 설계되었습니다.
+      Q방법론에서는 응답자의 직무 배경이 매우 중요한 분석 층화 변수이므로 본인의 직무군을 정확히 선택해 주십시오.
+    </div>
+
+    <div class="form-group">
+      <label for="pName">성명 또는 연구 식별코드 (ID) *</label>
+      <input type="text" id="pName" class="form-control" placeholder="예: P01, 소방팀장A 등 (익명 가능)" required />
+    </div>
+
+    <div class="form-group">
+      <label for="pGroup">소속 직무 그룹 (P-표본 4대 층화 직무군) *</label>
+      <select id="pGroup" class="form-control" required>
+        <option value="">-- 직무 그룹을 선택해 주십시오 --</option>
+        <option value="GroupA_소방 실무군">[그룹 A] 현직 소방 실무군 (진압팀장, 구조대원, 현장대응단 지휘조사팀)</option>
+        <option value="GroupB_방재 행정군">[그룹 B] 방재·행정 공무원군 (지자체 재난안전과, 행안부, 경찰 등)</option>
+        <option value="GroupC_안전 인프라군">[그룹 C] 공공·인프라 안전군 (가스, 철도, 전력 공기업 및 시설 안전관리자)</option>
+        <option value="GroupD_학술 연구군">[그룹 D] 학술·연구 전문가군 (재난관리학 대학원생, 방재안전 연구원)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="pExp">방재·소방·안전 실무 및 연구 경력 *</label>
+      <select id="pExp" class="form-control" required>
+        <option value="3년 미만">3년 미만</option>
+        <option value="3년~7년">3년 이상 ~ 7년 미만</option>
+        <option value="7년~12년">7년 이상 ~ 12년 미만</option>
+        <option value="12년~20년">12년 이상 ~ 20년 미만</option>
+        <option value="20년 이상">20년 이상</option>
+      </select>
+    </div>
+
+    <div class="btn-bar">
+      <div></div>
+      <button class="btn btn-primary" onclick="goToStep(2)">
+        다음 단계: 1단계 3분류 시작하기 <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 2: 1단계 3분류 (Rough Sorting) -->
+  <div class="page-section" id="page-2">
+    <div class="guide-box">
+      <strong><i class="fa-solid fa-hand-pointer"></i> 1단계 [대분류(Rough Sorting)] 안내:</strong><br/>
+      총 36장의 Q-진술문 카드가 1장씩 나타납니다. 각 카드의 내용을 읽으시고 본인의 실무 경험과 지휘 철학에 따라 
+      아래 세 바구니 중 하나를 클릭(또는 키보드 ←, ↓, →)하여 <strong>[비동의 (-)]</strong>, <strong>[중립 (0)]</strong>, <strong>[동의 (+)]</strong>로 1차 분류해 주십시오.
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="rough-progress"></div>
+    </div>
+    <div style="text-align: right; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 10px;">
+      진행률: <span id="rough-card-counter">1 / 36</span>
+    </div>
+
+    <div class="card-deck-container">
+      <div class="current-card-box" id="current-card">
+        <span class="current-card-id" id="card-id-badge">Q01</span>
+        <span class="current-card-dim" id="card-dim-badge">차원 1: 표준화 및 소통</span>
+        <div class="current-card-text" id="card-text">
+          재난 현장에서 기관 간 무전 불통을 방지하기 위해 단일 통합 재난안전통신망 사용을 법적으로 의무화해야 한다.
+        </div>
+        <div>
+          <span class="current-card-mechanism" id="card-mech-badge">🔗 [2장 작동기제 연결] 단일 PS-LTE 채널 사전 할당 및 3계층 통신망 강제 분리 메커니즘</span>
+        </div>
+      </div>
+
+      <div class="sorting-buckets">
+        <div class="bucket disagree" onclick="assignRough('disagree')">
+          <div class="bucket-title"><i class="fa-solid fa-thumbs-down"></i> 비동의 (-)</div>
+          <p>현장 적용이 부적절하거나 동의하지 않음</p>
+          <span class="bucket-count" id="count-disagree">0 장</span>
+        </div>
+
+        <div class="bucket neutral" onclick="assignRough('neutral')">
+          <div class="bucket-title"><i class="fa-solid fa-minus"></i> 중립 / 무관 (0)</div>
+          <p>중립적이거나 상황에 따라 다름</p>
+          <span class="bucket-count" id="count-neutral">0 장</span>
+        </div>
+
+        <div class="bucket agree" onclick="assignRough('agree')">
+          <div class="bucket-title"><i class="fa-solid fa-thumbs-up"></i> 동의 (+)</div>
+          <p>매우 중요하며 필수적인 원칙</p>
+          <span class="bucket-count" id="count-agree">0 장</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-bar">
+      <button class="btn btn-secondary" onclick="undoRough()"><i class="fa-solid fa-rotate-left"></i> 이전 카드로 되돌리기</button>
+      <button class="btn btn-primary" id="btn-to-step3" onclick="goToStep(3)" disabled>
+        2단계: 피라미드 그리드 배치로 이동 <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: 2단계 피라미드 그리드 배치 (Forced Q-Sorting) -->
+  <div class="page-section" id="page-3">
+    <div class="guide-box">
+      <strong><i class="fa-solid fa-chart-column"></i> 2단계 [강제정규분포 피라미드 배치] 안내:</strong><br/>
+      1단계에서 분류한 카드들을 아래의 <strong>9점 척도(-4 ~ +4) 강제정규분포 피라미드 슬롯</strong>에 드래그하여 배치하십시오.<br/>
+      • <strong>추천 순서:</strong> [동의(+)] 바구니에서 가장 동의하는 2장을 <strong>+4</strong>에 배치 ➔ [비동의(-)] 바구니에서 가장 비동의하는 2장을 <strong>-4</strong>에 배치 ➔ 차례대로 안쪽(+3, -3, +2, -2...)으로 채워나가며 마지막에 [중립(0)] 카드를 중앙 8칸에 채웁니다.<br/>
+      • 각 열(Column)의 슬롯 수가 모두 채워지면 열 상단 숫자가 녹색으로 변합니다. (총 36칸 100% 충족 필수)
+    </div>
+
+    <div class="pyramid-dual-workspace">
+      <!-- Left Panel: Pyramid Grid Board (9 Columns) -->
+      <div class="pyramid-left-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200);">
+          <h4 style="margin: 0; font-size: 1rem; color: var(--secondary);"><i class="fa-solid fa-shapes text-blue-600"></i> 강제정규분포 피라미드 그리드 (-4 ~ +4, 총 36칸)</h4>
+          <span style="font-size: 0.8rem; color: var(--gray-600);">우측 카드 목록에서 드래그하거나 [원클릭 점수 버튼]을 눌러 배치하세요</span>
+        </div>
+        <div class="pyramid-grid-wrapper">
+          <div class="pyramid-grid" id="pyramid-board">
+            <!-- 9 Columns rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Full Statement Cards List & Quick Actions -->
+      <div class="statement-right-panel">
+        <div class="right-panel-header">
+          <h4><i class="fa-solid fa-list-check text-blue-600"></i> 진술문 전체 목록 (36선)</h4>
+          <span class="unassigned-badge" id="unassigned-total-badge">미배치: <strong id="unassigned-total-count">36</strong>장</span>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="right-filter-tabs">
+          <button class="filter-tab-btn active" id="tab-all" onclick="switchPoolTab('all')">전체 (36)</button>
+          <button class="filter-tab-btn" id="tab-agree" onclick="switchPoolTab('agree')">동의(+) <span id="tray-count-agree">0</span></button>
+          <button class="filter-tab-btn" id="tab-disagree" onclick="switchPoolTab('disagree')">비동의(-) <span id="tray-count-disagree">0</span></button>
+          <button class="filter-tab-btn" id="tab-neutral" onclick="switchPoolTab('neutral')">중립(0) <span id="tray-count-neutral">0</span></button>
+          <button class="filter-tab-btn" id="tab-unassigned" onclick="switchPoolTab('unassigned')">미배치만</button>
+        </div>
+
+        <!-- Statement Cards Container with full text -->
+        <div class="statement-card-list" id="statement-card-list">
+          <!-- Cards rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-bar">
+      <button class="btn btn-secondary" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> 이전 단계 (1차 분류)</button>
+      <button class="btn btn-primary" id="btn-to-step4" onclick="goToStep(4)" disabled>
+        다음 단계: 양극단 인터뷰 작성 <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 4: 심층 질적 인터뷰 및 최종 제출 -->
+  <div class="page-section" id="page-4">
+    <div class="guide-box">
+      <strong><i class="fa-solid fa-comments"></i> 3단계 [심층 질적 의미구성 인터뷰] 안내:</strong><br/>
+      Q방법론 해석의 핵심은 양극단(+4, -4)에 카드를 배치한 <strong>연구 참여자의 내면적 이유와 상황적 맥락</strong>입니다. 
+      선택하신 최우선 원칙과 배제 원칙에 대해 본인의 현장 경험을 담아 기술해 주십시오.
+    </div>
+
+    <div class="form-group" style="max-width: 100%;">
+      <label for="posReason">
+        <i class="fa-solid fa-thumbs-up text-green-600"></i> 1. 가장 강력하게 동의한 <strong>[+4]</strong> 진술문들을 최고 순위로 선정한 실무적 이유는 무엇입니까? *
+      </label>
+      <div id="pos-selected-items" style="margin-bottom: 8px; font-weight: 700; color: #15803d; font-size: 0.95rem;"></div>
+      <textarea id="posReason" class="form-control" rows="4" placeholder="현장 지휘 시 골든타임 확보, 다기관 협력의 안정성, 대원 안전 등 구체적 경험과 이유를 서술해 주십시오." required></textarea>
+    </div>
+
+    <div class="form-group" style="max-width: 100%;">
+      <label for="negReason">
+        <i class="fa-solid fa-thumbs-down text-red-600"></i> 2. 가장 동의하지 않거나 현장 적용이 어렵다고 판단한 <strong>[-4]</strong> 진술문들의 배제 이유는 무엇입니까? *
+      </label>
+      <div id="neg-selected-items" style="margin-bottom: 8px; font-weight: 700; color: #b91c1c; font-size: 0.95rem;"></div>
+      <textarea id="negReason" class="form-control" rows="4" placeholder="한국적 재난대응 체계와의 괴리, 형식적 행정주의의 부작용, 현장 자율성 침해 우려 등을 솔직하게 서술해 주십시오." required></textarea>
+    </div>
+
+    <div class="form-group" style="max-width: 100%;">
+      <label for="freeComments">
+        <i class="fa-solid fa-lightbulb text-amber-500"></i> 3. NIMS 관리원칙의 성공적인 한국형 현장지휘체계 안착을 위한 자유 제언 (선택)
+      </label>
+      <textarea id="freeComments" class="form-control" rows="3" placeholder="법령 개정, 합동 훈련 체계, 지휘권 일원화 등 제도적 개선 방안을 자유롭게 제언해 주십시오."></textarea>
+    </div>
+
+    <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 22px; margin-top: 30px;">
+      <h4 style="margin-bottom: 8px; color: var(--gray-800);"><i class="fa-solid fa-file-export"></i> 응답 데이터셋 다운로드 (연구자 제출용)</h4>
+      <p style="font-size: 0.88rem; color: var(--gray-600); margin-bottom: 15px;">
+        설문 완료 시 <strong>JSON 데이터 파일</strong>이 자동으로 생성되어 다운로드됩니다. 다운로드된 파일을 연구자에게 이메일이나 카카오톡으로 제출해 주시면 됩니다.
+      </p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+        <button class="btn btn-primary" onclick="downloadJSON()"><i class="fa-solid fa-file-code"></i> 📥 JSON 결과 파일 다운로드 (제출용 필수)</button>
+        <button class="btn btn-secondary" onclick="downloadCSV()"><i class="fa-solid fa-file-csv"></i> 📊 CSV 엑셀 다운로드</button>
+        <button class="btn btn-secondary" onclick="copyKenQData()"><i class="fa-solid fa-copy"></i> KenQ 데이터 복사</button>
+      </div>
+
+      <label style="font-size: 0.82rem; font-weight: 700; color: var(--gray-600);">KenQ 분석용 원시 데이터 미리보기:</label>
+      <textarea id="kenqRawData" class="kenq-export-box" readonly></textarea>
+    </div>
+
+    <div class="btn-bar">
+      <button class="btn btn-secondary" onclick="goToStep(3)"><i class="fa-solid fa-arrow-left"></i> 이전 단계 (그리드 수정)</button>
+      <button class="btn btn-primary" onclick="submitFinalResponse()"><i class="fa-solid fa-cloud-arrow-down"></i> 최종 응답 완료 및 JSON 다운로드</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Aggregating 16 JSON Files (Researcher Tool) -->
+<div class="modal-overlay" id="aggregator-modal" onclick="closeAggregatorModal()">
+  <div class="modal-box" style="max-width: 860px; width: 95%; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--gray-200); padding-bottom: 10px;">
+      <h3 style="color: var(--secondary); margin: 0; font-size: 1.25rem;"><i class="fa-solid fa-folder-tree text-blue-600"></i> 📊 연구자 전용: 16인 응답 JSON 통합 집계 대시보드</h3>
+      <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.9rem;" onclick="closeAggregatorModal()">✕</button>
+    </div>
+    
+    <div class="guide-box" style="margin-bottom: 15px; font-size: 0.88rem; line-height: 1.6;">
+      <strong>연구자 안내:</strong> 수강생 16명으로부터 전달받은 <code>.json</code> 파일들을 아래 상자에 드래그하거나 [파일 선택]으로 한꺼번에 불러오십시오.<br/>
+      4대 직무군별 층화표집(각 4명) 충족 여부를 자동 검증하고, <strong>KenQ 종합 분석 데이터셋(.dat)</strong> 및 <strong>16인 통합 엑셀 CSV</strong>를 1초 만에 자동 생성합니다.
+    </div>
+
+    <div style="border: 2px dashed var(--primary); padding: 30px; text-align: center; border-radius: 10px; background: var(--primary-light); cursor: pointer;" onclick="document.getElementById('json-file-input').click()">
+      <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 10px;"></i>
+      <p style="font-weight: 700; color: var(--primary-dark); font-size: 1.05rem; margin: 0;">수집한 JSON 파일들을 이곳에 드래그하거나 클릭하여 다중 선택하세요</p>
+      <span style="font-size: 0.85rem; color: var(--gray-600); display: block; margin-top: 5px;">(Ctrl 또는 Cmd를 누르고 16개 파일을 한꺼번에 선택 가능)</span>
+      <input type="file" id="json-file-input" multiple accept=".json" style="display: none;" onchange="handleJSONFiles(this.files)" />
+    </div>
+
+    <!-- Aggregation Summary Table -->
+    <div id="aggregator-results" style="margin-top: 25px; display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h4 style="margin: 0; color: var(--gray-800);"><i class="fa-solid fa-users"></i> 취합된 응답자 현황 (<span id="loaded-count" style="color:var(--primary); font-weight:800;">0</span> / 16명)</h4>
+        <span id="strata-status-badge" style="padding: 3px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; background: #fee2e2; color: #991b1b;">검증 중</span>
+      </div>
+      
+      <div style="max-height: 220px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 15px;">
+        <table style="font-size: 0.85rem; margin: 0; width: 100%;">
+          <thead>
+            <tr>
+              <th style="width: 15%;">식별코드</th>
+              <th style="width: 32%;">소속 직무군</th>
+              <th style="width: 18%;">경력</th>
+              <th style="width: 35%;">제출일시</th>
+            </tr>
+          </thead>
+          <tbody id="aggregator-table-body"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: var(--gray-800);">통합 KenQ 분석용 데이터셋 (16인 전수 매트릭스):</label>
+          <button class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.78rem;" onclick="copyCombinedKenQ()"><i class="fa-solid fa-copy"></i> 전체 복사</button>
+        </div>
+        <textarea id="combined-kenq-data" class="kenq-export-box" style="height: 140px; font-size: 0.82rem;" readonly></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="downloadCombinedKenQ()"><i class="fa-solid fa-file-arrow-down"></i> 📥 KenQ용 통합 .dat 파일 다운로드</button>
+        <button class="btn btn-secondary" onclick="downloadCombinedCSV()"><i class="fa-solid fa-file-excel"></i> 📊 16인 통합 엑셀 CSV 다운로드</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Viewing Full Statement Info -->
+<div class="modal-overlay" id="card-modal" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary);" id="m-card-id">Q01</span>
+    <h3 style="margin: 10px 0 15px 0; font-size: 1.15rem; color: var(--gray-800);" id="m-card-text">진술문</h3>
+    <div style="background: #e0f2fe; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; color: #0369a1; margin-bottom: 15px;" id="m-card-mech">작동기제</div>
+    <div style="text-align: right;">
+      <button class="btn btn-secondary" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==============================================================================
+// 1. Q-진술문 36선 마스터 데이터 (NIMS 14대 관리원칙 및 2장 작동기제 연결)
+// ==============================================================================
+const Q_STATEMENTS = [
+  { id: 1, no: "01", dim: "차원 1: 표준화 및 소통체계", text: "재난 현장에서 기관 간 무전 불통을 방지하기 위해 단일 통합 재난안전통신망 사용을 법적으로 의무화해야 한다.", mech: "원칙 2 통합 통신 │ 단일 PS-LTE 채널 사전 할당 및 3계층 통신망 강제 분리 메커니즘" },
+  { id: 2, no: "02", dim: "차원 1: 표준화 및 소통체계", text: "소방, 경찰, 지자체가 현장에서 서로 다른 은어나 약어를 쓰지 못하도록 표준 용어(Common Terminology) 사전을 의무 적용해야 한다.", mech: "원칙 1 표준 용어 │ 무전 은어(10-Code) 전면 배제 및 직책·자원·시설 표준 용어 편람 적용" },
+  { id: 3, no: "03", dim: "차원 1: 표준화 및 소통체계", text: "지휘관의 개인적 직관에 의존하지 않고, 드론 및 공간정보 기반의 실시간 현장 상황정보를 모든 기관이 동시 공유해야 한다.", mech: "원칙 3 정보 관리 │ 기획부 상황분석실 교차 검증을 거친 공통작전상황도(COP) 다기관 실시간 동기화" },
+  { id: 4, no: "04", dim: "차원 1: 표준화 및 소통체계", text: "재난 초기 현장 브리핑은 단순 구두 보고를 지양하고, 정형화된 표준 상황보고 양식(ICS 201 양식 등)에 따라 일관되게 진행되어야 한다.", mech: "원칙 3 정보 관리 │ 지도·자원·과업을 포괄하는 정규 ICS 201 서식 기반 브리핑 집행 메커니즘" },
+  { id: 5, no: "05", dim: "차원 1: 표준화 및 소통체계", text: "기관별 개별 무전 채널 사용을 엄격히 금지하고, 현장 진입 시 사전에 지정된 통합 지휘통신 채널로 강제 통일해야 한다.", mech: "원칙 2 통합 통신 │ ICS 205(통신계획서)에 따른 지휘망 전환 프로토콜 및 비인가 사설 채널 차단" },
+  { id: 6, no: "06", dim: "차원 1: 표준화 및 소통체계", text: "현장의 위험물 정보, 건물 구조도 등 전문 기술 인텔리전스는 복잡한 결재선 없이 현장지휘관에게 실시간으로 직통 보고되어야 한다.", mech: "원칙 3 & 14 기술전문성 │ 필수정보요소(EEI) 사전 정의 및 위험물·건축 구조 등 긴급 정보 지휘부 직통 핫라인" },
+  { id: 7, no: "07", dim: "차원 1: 표준화 및 소통체계", text: "언론 대응 및 대국민 안내 시 혼선을 방지하기 위해 다기관 합동 공보실(JIC: Joint Information Center)을 초기에 의무 설치해야 한다.", mech: "원칙 1 표준 공보체계 │ 개별 언론 접촉 차단 및 JIC 설치를 통한 공식 대국민 단일 창구(One-Voice) 통제" },
+  { id: 8, no: "08", dim: "차원 1: 표준화 및 소통체계", text: "재난 현장의 피해 규모와 상황 평가는 각 기관이 개별 집계하지 않고 공통 상황평가 절차를 통해 단일화되어야 한다.", mech: "원칙 3 정보 관리 │ 피해 추산 상충을 방지하는 다기관 단일 상황평가 기준 및 공식 집계창구 일원화" },
+  { id: 9, no: "09", dim: "차원 1: 표준화 및 소통체계", text: "현장 대원의 안전과 직결된 긴급 철수 신호(Evacuation Signal)는 기관에 상관없이 동일한 표준 음향과 수신호로 통일되어야 한다.", mech: "원칙 1 & 8 표준화·안전 │ 급박한 위험 시 다기관 투입 대원의 즉각 생존을 보장하는 표준 음향 경보 및 철수 수신호 강제 프로토콜" },
+
+  { id: 10, no: "10", dim: "차원 2: 명령 및 지휘구조", text: "복합재난 시 소방, 지자체, 경찰의 책임자가 한 공간에 모여 공동의 작전 목표를 세우는 통합지휘체계(Unified Command)를 필히 가동해야 한다.", mech: "원칙 5 통합지휘 (UC) │ 단일 현장지휘소(Single ICP) 개설 및 대면 회의를 통한 다기관 공동 목표(Joint Objectives) 승인 거버넌스" },
+  { id: 11, no: "11", dim: "차원 2: 명령 및 지휘구조", text: "한 명의 현장 대원은 오직 한 명의 직속 상관에게만 명령을 받고 보고하는 지휘의 단일성(Unity of Command)이 철저히 지켜져야 한다.", mech: "원칙 4 지휘의 단일성 │ 1인 1직속상관 보고체계(Single Reporting Line) 엄수 및 비인가 직통 지시 무효화" },
+  { id: 12, no: "12", dim: "차원 2: 명령 및 지휘구조", text: "선착대장에서 상급 지휘관으로 지휘권을 넘길 때는 반드시 공식적인 상황 인수인계 브리핑(Transfer of Command)을 거쳐야 한다.", mech: "원칙 6 지휘권 이양 │ ICS 201 기반 대면 브리핑(상황·전술·자원·위험 인계) 및 지휘 공백 방지 절차 메커니즘" },
+  { id: 13, no: "13", dim: "차원 2: 명령 및 지휘구조", text: "지자체장이나 외부 고위직 인사가 현장에 오더라도 전문 지휘관의 현장 전술 지휘권을 침해할 수 없도록 법적 독립성이 보장되어야 한다.", mech: "원칙 4 지휘 계통 확립 │ 외부 비전문가 개입 차단, 현장지휘관의 배타적 전술권 보장 및 정규 지휘계통(Chain of Command) 보호" },
+  { id: 14, no: "14", dim: "차원 2: 명령 및 지휘구조", text: "재난 규모가 커지면 상급자가 관서에서 무전으로 원격 지휘하지 않고, 현장지휘소(ICP)에 직접 합류하여 통합지휘체계를 갖추어야 한다.", mech: "원칙 5 통합지휘 (UC) │ 관서 원격지휘의 인지 오류 방지, 현장지휘소(ICP) 물리적 합류를 통한 대면 합동 의사결정 집행" },
+  { id: 15, no: "15", dim: "차원 2: 명령 및 지휘구조", text: "타 기관(경찰, 군, 자원봉사 등) 지원 인력은 독자적으로 행동하지 않고 현장지휘관의 명령 계통(Chain of Command) 하에 완전 편속되어야 한다.", mech: "원칙 4 지휘 계통 │ 기관별 독자 행동(Freelancing) 차단, 외부 전력을 현장 직제(Section/Branch/Group) 내 직속 라인으로 편속" },
+  { id: 16, no: "16", dim: "차원 2: 명령 및 지휘구조", text: "지휘권 이양 시 현장 상황, 투입 자원, 미완료 과업을 명시한 공식 서면 기록을 남겨 지휘 공백과 책임 회피를 방지해야 한다.", mech: "원칙 6 지휘권 이양 │ 인수인계 시점의 상황·자원·미완료 과업을 공식 서면화하여 지휘 책임성(Accountability)을 담보" },
+  { id: 17, no: "17", dim: "차원 2: 명령 및 지휘구조", text: "다기관 합동 대응 시 각 기관의 법적 책임을 존중하되, 현장 안전관리와 인명구조 작전은 소방 지휘관이 총괄 지휘권을 행사해야 한다.", mech: "원칙 5 통합지휘 (UC) │ 통합지휘 내에서도 현장 전술 집행을 일원화하기 위해 긴급구조 국면 단일 작전부서장(Operations Section Chief)을 소방에 단일 귀속" },
+  { id: 18, no: "18", dim: "차원 2: 명령 및 지휘구조", text: "현장지휘관 부재나 유고 시 사전에 승계 서열과 대리 권한이 문서화되어 있어 즉각적이고 공식적인 지휘권 승계가 이루어져야 한다.", mech: "원칙 6 지휘권 확립 │ 돌발 유고 시 지휘 공백을 방지하기 위해 사전 직무대리 서열 및 비상 대리권 자동 발동 프로토콜" },
+
+  { id: 19, no: "19", dim: "차원 3: 조직 유연성 및 통제", text: "재난의 성격과 규모에 맞춰 지휘 조직을 단계별로 유연하게 확장·축소하는 모듈형 조직(Modular Organization) 편성이 정착되어야 한다.", mech: "원칙 7 모듈형 조직 │ 책임 자동 귀속(Default Responsibility: 미위임 기능은 지휘관 직접 수행) 원칙 및 상향식(Bottom-up) 직제 분화" },
+  { id: 20, no: "20", dim: "차원 3: 조직 유연성 및 통제", text: "한 명의 지휘관이 효과적으로 통제할 수 있는 관리 가능한 통제범위(Span of Control)는 최대 7명(적정 5명)을 넘지 않도록 제한해야 한다.", mech: "원칙 8 통제범위 (Span) │ 1:5 최적 비율 가이드라인 준수 및 직접 감독 7명 초과 시 직속 보고 단위 강제 분할 메커니즘" },
+  { id: 21, no: "21", dim: "차원 3: 조직 유연성 및 통제", text: "현장지휘소(ICP), 자원대기소(Staging Area), 임시응급의료소 등 핵심 현장 시설의 위치와 명칭은 사전에 표준화되어야 한다.", mech: "원칙 9 시설 표준화 │ 안전 구역 내 ICP 개설, 외곽 Staging Area 등 표준 거점 배치 및 지도 표식(Map Symbols) 동기화" },
+  { id: 22, no: "22", dim: "차원 3: 조직 유연성 및 통제", text: "단순 화재라도 연소 확대 위험이 있으면 초기부터 전술 분과(진압, 구조, 안전, 자원)를 조기에 분리·편성해야 한다.", mech: "원칙 7 모듈형 조직 │ 복잡성 확대 징후 포착 시 지휘관 1인 체제에서 기능별 분과(Section/Branch)를 선제적으로 활성화하는 확장 메커니즘" },
+  { id: 23, no: "23", dim: "차원 3: 조직 유연성 및 통제", text: "지휘관 1명에게 과도한 보고가 집중되는 것을 막기 위해 중간 관리자(방면지휘관, 분과장)에게 전술적 권한을 대폭 위임해야 한다.", mech: "원칙 8 통제범위 & 권한위임 │ 지휘 병목 차단, 현장 방면장(Division) 및 분과장(Branch)에게 전술적 RAA(책임·권한)를 위임하는 분권형 메커니즘" },
+  { id: 24, no: "24", dim: "차원 3: 조직 유연성 및 통제", text: "지원 출동한 외부 자원이 현장에 무질서하게 섞이지 않도록 외곽 자원대기소(Staging Area)를 사전에 의무 지정·운영해야 한다.", mech: "원칙 9 & 13 시설 & 자원통제 │ 진입로 외곽 Staging Area 설치를 통해 비인가 자원의 현장 진입을 물리적으로 차단하고 대기 상태를 유지시키는 필터링" },
+  { id: 25, no: "25", dim: "차원 3: 조직 유연성 및 통제", text: "특수 재난(화학물질, 붕괴 등) 발생 시 구조공학 전문가 등 전문 기술 자문관(Technical Specialist)을 지휘관 직속 참모로 즉시 배치할 수 있어야 한다.", mech: "원칙 7 & 14 기술참모 편제 │ 특수 위험 분석을 위해 기획부 내 전문기술단(Technical Specialists) 신설 및 지휘관 직속 특수참모 직결 편제" },
+  { id: 26, no: "26", dim: "차원 3: 조직 유연성 및 통제", text: "지휘관의 시야를 벗어난 대규모 현장은 지리적 방면(Division)이나 기능별(Group)로 세분화하여 별도 구역 지휘관을 두어야 한다.", mech: "원칙 8 통제범위 유지 │ 공간적 한계를 극복하기 위해 지리적 구역(Division: 층/방면) 및 기능별 구역(Group: 구조/환기)으로 지휘 단위를 2차원 분할" },
+  { id: 27, no: "27", dim: "차원 3: 조직 유연성 및 통제", text: "다수사상자 발생 시 중증도 분류와 이송을 전담하는 임시응급의료소는 일반 환자 가족 통제구역과 명확히 공간적으로 분리 설치되어야 한다.", mech: "원칙 9 특수 시설 표준화 │ 환자 처치 골든타임 확보 및 혼란 차단을 위해 중증도 분류(Triage) 구역을 일반 구역과 물리적으로 격리하는 시설 운영" },
+
+  { id: 28, no: "28", dim: "차원 4: 체계적 작전 및 자원관리", text: "모든 현장 활동은 지휘관의 경험적 직관이 아닌 명문화된 목표기반 관리(MBO: Management by Objectives) 체계에 따라 수립되어야 한다.", mech: "원칙 10 목표기반 관리 (MBO) │ SMART 원칙(구체성, 측정가능성, 시한성)에 부합하는 사건 목표 수립 및 기능별 세부 임무 정렬 성과관리" },
+  { id: 29, no: "29", dim: "차원 4: 체계적 작전 및 자원관리", text: "재난 현장의 모든 투입 기관이 공유하고 실행하는 단일 현장행동계획(IAP: Incident Action Plan)이 작전 주기마다 공식 문서로 작성되어야 한다.", mech: "원칙 11 단일 IAP │ ICS 표준 서식군(ICS 202~208) 번들링 승인 및 모든 참여 기관 대원에게 다음 작전 주기 전 배포·숙지시키는 문서 동기화" },
+  { id: 30, no: "30", dim: "차원 4: 체계적 작전 및 자원관리", text: "현장에 투입되는 인력과 장비는 사전에 객관적으로 검증된 자격 및 역량 인증(Credentialing)을 거친 자원만 투입되어야 한다.", mech: "원칙 12 종합 자원관리 │ 자원 유형화(Resource Typing: 1~4급) 기준에 따라 사전 검증된 자격·장비 역량을 대조하여 부적격 자원을 걸러내는 인증" },
+  { id: 31, no: "31", dim: "차원 4: 체계적 작전 및 자원관리", text: "지휘부의 정식 요청이나 배정 없이 자발적으로 현장에 무단 진입하는 자율 출동(Self-dispatching)은 엄격히 통제·차단해야 한다.", mech: "원칙 13 자원배치 통제 │ 미인가 자율출동을 진입로 검문소(Access Control)에서 차단하고, 정규 절차를 거친 공인 자원만 전술 배치하는 규율" },
+  { id: 32, no: "32", dim: "차원 4: 체계적 작전 및 자원관리", text: "현장 교대 주기에 맞춰 상황 브리핑과 계획 수립 주기가 맞물려 돌아가는 체계적 작전 계획 주기(Planning P)가 가동되어야 한다.", mech: "원칙 11 계획 주기 (Planning P) │ 기획 P 엄격한 5단계 회의 사이클(상황브리핑→지휘관지침→전술회의→기획회의→IAP승인)을 작전 주기마다 반복 순환" },
+  { id: 33, no: "33", dim: "차원 4: 체계적 작전 및 자원관리", text: "투입된 모든 자원(소방차, 굴착기, 민간 구호대 등)의 현장 위치와 가동 상태가 실시간으로 전산 추적·기록되어야 한다.", mech: "원칙 12 종합 자원관리 │ T-Card(ICS 219) 및 전산망을 통해 자원의 3대 가용성 상태(할당됨/가용함/점검중)를 실시간 추적·기록하는 책무성" },
+  { id: 34, no: "34", dim: "차원 4: 체계적 작전 및 자원관리", text: "현장 작전 목표는 막연한 구호가 아니라 측정 가능하고 구체적인 달성 기준(예: 30분 내 잔여층 검색 완료)으로 명시되어야 한다.", mech: "원칙 10 목표기반 관리 (MBO) │ 구호가 아닌 수치화된 시간·범위 기준(ICS 202)을 명시하여 전술 달성도를 계량 측정하는 평가 메커니즘" },
+  { id: 35, no: "35", dim: "차원 4: 체계적 작전 및 자원관리", text: "임무가 끝난 자원은 현장에 머무르지 않고 즉각 점검 후 철수·복귀시키는 자원 해제(Demobilization) 절차가 공식화되어야 한다.", mech: "원칙 12 자원관리 6단계 │ 현장 낭비 및 대원 피로를 방지하기 위해 자원관리 생애주기 5단계인 공식 자원 해제(Demobilization Check-out) 절차 복귀 메커니즘" },
+  { id: 36, no: "36", dim: "차원 4: 체계적 작전 및 자원관리", text: "작전 종료 후 각 기관이 함께 모여 실수와 개선점을 가감 없이 평가하는 사후 검토(AAR: After Action Review) 회의가 제도적으로 의무화되어야 한다.", mech: "원칙 10 사후 평가 및 환류 │ 작전 종료 후 참여 기관 전원이 모여 계획 대비 실제 달성도를 냉정히 분석하고 교훈을 환류(Feedback)하는 공식 AAR" }
+];
+
+// 9점 척도 피라미드 규격: -4(2), -3(3), -2(4), -1(5), 0(8), +1(5), +2(4), +3(3), +4(2)
+const PYRAMID_QUOTAS = {
+  "-4": 2,
+  "-3": 3,
+  "-2": 4,
+  "-1": 5,
+  "0": 8,
+  "+1": 5,
+  "+2": 4,
+  "+3": 3,
+  "+4": 2
+};
+
+// State Variables
+let currentStep = 1;
+let roughIndex = 0;
+let roughBuckets = { disagree: [], neutral: [], agree: [] };
+let roughHistory = [];
+let gridPlacement = {}; // { cardId: score(-4 ~ +4) }
+let activeTrayTab = 'agree';
+let draggedCardId = null;
+
+// ==============================================================================
+// Global Toast Notification System (Smooth, non-intrusive feedback)
+// ==============================================================================
+function showToast(message, type = 'info') {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  let icon = '<i class="fa-solid fa-circle-info"></i>';
+  if (type === 'warn') icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+  if (type === 'success') icon = '<i class="fa-solid fa-circle-check"></i>';
+
+  toast.className = `toast-msg ${type}`;
+  toast.innerHTML = `${icon} <span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('fade-out');
+    setTimeout(() => {
+      toast.remove();
+    }, 260);
+  }, 2200);
+}
+
+// ==============================================================================
+// 2. Step Navigation
+// ==============================================================================
+function goToStep(step) {
+  if (step === 2) {
+    const name = document.getElementById('pName').value.trim();
+    const grp = document.getElementById('pGroup').value;
+    if (!name || !grp) {
+      showToast("성명(식별코드)과 소속 직무 그룹을 입력해 주십시오.", "warn");
+      return;
+    }
+  }
+
+  if (step === 3) {
+    if (roughIndex < Q_STATEMENTS.length) {
+      showToast("36개 진술문을 모두 1차 분류해야 피라미드 배치로 이동할 수 있습니다.", "warn");
+      return;
+    }
+    renderPyramidBoard();
+    renderRightStatementList();
+  }
+
+  if (step === 4) {
+    // Check if all 36 cards are placed in grid
+    const placedCount = Object.keys(gridPlacement).length;
+    if (placedCount !== 36) {
+      showToast(`피라미드 36칸이 모두 채워져야 합니다. (현재 배치: ${placedCount} / 36)`, "warn");
+      return;
+    }
+    renderQualitativeStatements();
+    generateKenQDataset();
+  }
+
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${step}`).classList.add('active');
+
+  for (let i = 1; i <= 4; i++) {
+    const nav = document.getElementById(`step-nav-${i}`);
+    nav.classList.remove('active');
+    if (i === step) nav.classList.add('active');
+    if (i < step) nav.classList.add('completed');
+  }
+
+  currentStep = step;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==============================================================================
+// 3. Step 2: 1차 3분류 (Rough Sorting) Logic
+// ==============================================================================
+function updateRoughCard() {
+  if (roughIndex >= Q_STATEMENTS.length) {
+    document.getElementById('current-card').innerHTML = `
+      <div style="padding: 20px;">
+        <i class="fa-solid fa-circle-check text-green-600" style="font-size: 3rem; color: #16a34a; margin-bottom: 15px;"></i>
+        <h3 style="color: #1e3a8a;">1단계 36개 진술문 대분류 완료!</h3>
+        <p style="color: #64748b; margin-top: 8px;">아래 '2단계: 피라미드 그리드 배치로 이동' 버튼을 눌러주십시오.</p>
+      </div>
+    `;
+    document.getElementById('btn-to-step3').disabled = false;
+    document.getElementById('rough-progress').style.width = '100%';
+    document.getElementById('rough-card-counter').innerText = '36 / 36 완료';
+    return;
+  }
+
+  const card = Q_STATEMENTS[roughIndex];
+  document.getElementById('card-id-badge').innerText = `Q${card.no}`;
+  document.getElementById('card-dim-badge').innerText = card.dim;
+  document.getElementById('card-text').innerText = card.text;
+  document.getElementById('card-mech-badge').innerText = `🔗 [2장 작동기제 연결] ${card.mech}`;
+
+  const pct = (roughIndex / Q_STATEMENTS.length) * 100;
+  document.getElementById('rough-progress').style.width = `${pct}%`;
+  document.getElementById('rough-card-counter').innerText = `${roughIndex + 1} / 36`;
+
+  document.getElementById('count-disagree').innerText = `${roughBuckets.disagree.length} 장`;
+  document.getElementById('count-neutral').innerText = `${roughBuckets.neutral.length} 장`;
+  document.getElementById('count-agree').innerText = `${roughBuckets.agree.length} 장`;
+}
+
+function assignRough(type) {
+  if (roughIndex >= Q_STATEMENTS.length) return;
+  const card = Q_STATEMENTS[roughIndex];
+  roughBuckets[type].push(card);
+  roughHistory.push({ index: roughIndex, type: type });
+  roughIndex++;
+  updateRoughCard();
+}
+
+function undoRough() {
+  if (roughHistory.length === 0) return;
+  const last = roughHistory.pop();
+  const card = Q_STATEMENTS[last.index];
+  roughBuckets[last.type] = roughBuckets[last.type].filter(c => c.id !== card.id);
+  roughIndex = last.index;
+  updateRoughCard();
+  document.getElementById('btn-to-step3').disabled = true;
+}
+
+// Keyboard shortcuts for rough sorting
+window.addEventListener('keydown', (e) => {
+  if (currentStep !== 2) return;
+  if (e.key === 'ArrowLeft') assignRough('disagree');
+  if (e.key === 'ArrowDown') assignRough('neutral');
+  if (e.key === 'ArrowRight') assignRough('agree');
+});
+
+// ==============================================================================
+// 4. Step 3: 2단계 피라미드 강제분포 배치 (Pyramid Sorting) & 우측 진술문 패널
+// ==============================================================================
+function switchPoolTab(tab) {
+  activeTrayTab = tab;
+  document.querySelectorAll('.filter-tab-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`tab-${tab}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  renderRightStatementList();
+}
+
+function renderRightStatementList() {
+  const container = document.getElementById('statement-card-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Calculate unassigned counts
+  const placedIds = Object.keys(gridPlacement).map(id => parseInt(id));
+  const totalUnassigned = 36 - placedIds.length;
+
+  document.getElementById('unassigned-total-count').innerText = totalUnassigned;
+  const badge = document.getElementById('unassigned-total-badge');
+  if (badge) {
+    if (totalUnassigned === 0) {
+      badge.classList.add('complete');
+      badge.innerHTML = '✅ 배치 완료 (36/36)';
+    } else {
+      badge.classList.remove('complete');
+      badge.innerHTML = `미배치: <strong id="unassigned-total-count">${totalUnassigned}</strong>장 남음`;
+    }
+  }
+
+  // Update counts
+  const countAgree = roughBuckets.agree.length;
+  const countDisagree = roughBuckets.disagree.length;
+  const countNeutral = roughBuckets.neutral.length;
+
+  const countAgreeUnassigned = roughBuckets.agree.filter(c => !placedIds.includes(c.id)).length;
+  const countDisagreeUnassigned = roughBuckets.disagree.filter(c => !placedIds.includes(c.id)).length;
+  const countNeutralUnassigned = roughBuckets.neutral.filter(c => !placedIds.includes(c.id)).length;
+
+  const elA = document.getElementById('tray-count-agree');
+  if (elA) elA.innerText = `${countAgreeUnassigned}/${countAgree}`;
+  const elD = document.getElementById('tray-count-disagree');
+  if (elD) elD.innerText = `${countDisagreeUnassigned}/${countDisagree}`;
+  const elN = document.getElementById('tray-count-neutral');
+  if (elN) elN.innerText = `${countNeutralUnassigned}/${countNeutral}`;
+
+  // Next step button enabled/disabled
+  const btnNext = document.getElementById('btn-to-step4');
+  if (btnNext) btnNext.disabled = (totalUnassigned !== 0);
+
+  // Filter cards based on tab
+  let filteredCards = [];
+  if (activeTrayTab === 'all') {
+    filteredCards = [...Q_STATEMENTS];
+  } else if (activeTrayTab === 'agree') {
+    filteredCards = roughBuckets.agree;
+  } else if (activeTrayTab === 'disagree') {
+    filteredCards = roughBuckets.disagree;
+  } else if (activeTrayTab === 'neutral') {
+    filteredCards = roughBuckets.neutral;
+  } else if (activeTrayTab === 'unassigned') {
+    filteredCards = Q_STATEMENTS.filter(c => !placedIds.includes(c.id));
+  }
+
+  if (filteredCards.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:30px 10px; color:#94a3b8; font-size:0.9rem;">해당 분류의 진술문이 없습니다.</div>`;
+    return;
+  }
+
+  // Pre-calculate placed counts for each score column to control disabled states
+  const scores = ["-4", "-3", "-2", "-1", "0", "+1", "+2", "+3", "+4"];
+  const colCounts = {};
+  scores.forEach(s => {
+    colCounts[s] = Object.entries(gridPlacement).filter(([_, sc]) => sc === s).length;
+  });
+
+  filteredCards.forEach(card => {
+    const isPlaced = card.id in gridPlacement;
+    const currentScore = gridPlacement[card.id];
+
+    // Determine 1st rough sort category
+    let roughTag = '';
+    if (roughBuckets.agree.some(c => c.id === card.id)) {
+      roughTag = `<span style="background:#dcfce7; color:#15803d; padding:2px 6px; border-radius:4px; font-size:0.72rem; font-weight:700;">동의(+)</span>`;
+    } else if (roughBuckets.disagree.some(c => c.id === card.id)) {
+      roughTag = `<span style="background:#fee2e2; color:#b91c1c; padding:2px 6px; border-radius:4px; font-size:0.72rem; font-weight:700;">비동의(-)</span>`;
+    } else {
+      roughTag = `<span style="background:#f1f5f9; color:#475569; padding:2px 6px; border-radius:4px; font-size:0.72rem; font-weight:700;">중립(0)</span>`;
+    }
+
+    // Placement status badge
+    let statusBadge = isPlaced 
+      ? `<span style="background:${currentScore.startsWith('+') ? '#dcfce7' : (currentScore === '0' ? '#f1f5f9' : '#fee2e2')}; color:${currentScore.startsWith('+') ? '#15803d' : (currentScore === '0' ? '#334155' : '#b91c1c')}; padding:2px 8px; border-radius:9999px; font-size:0.75rem; font-weight:800; border:1px solid currentColor;">${currentScore} 배치됨</span>`
+      : `<span style="background:#f1f5f9; color:#64748b; padding:2px 8px; border-radius:9999px; font-size:0.72rem; font-weight:600;">미배치</span>`;
+
+    // Generate Quick Score Buttons with Disabled state if column is full
+    let quickButtonsHtml = '';
+    scores.forEach(s => {
+      const isCur = isPlaced && currentScore === s;
+      const maxQuota = PYRAMID_QUOTAS[s];
+      const curCount = colCounts[s] || 0;
+      const isFull = (curCount >= maxQuota) && !isCur;
+
+      const btnTypeClass = s.startsWith('-') ? 'neg' : (s === '0' ? 'zero' : 'pos');
+      const activeClass = isCur ? 'active' : '';
+      const disabledAttr = isFull ? 'disabled' : '';
+      const tooltip = isFull 
+        ? `[${s}] 정원 마감 (${maxQuota}/${maxQuota}칸 가득참)` 
+        : (isCur ? `현재 [${s}]에 배치됨` : `[${s}]에 배치하기 (${curCount}/${maxQuota}칸 채워짐)`);
+
+      quickButtonsHtml += `<button class="quick-score-btn ${btnTypeClass} ${activeClass}" ${disabledAttr} title="${tooltip}" onclick="quickAssign(${card.id}, '${s}')">${s}</button>`;
+    });
+
+    const cardEl = document.createElement('div');
+    cardEl.className = `right-statement-card ${isPlaced ? 'placed' : ''}`;
+    cardEl.draggable = true;
+    cardEl.dataset.cardId = card.id;
+
+    cardEl.innerHTML = `
+      <div class="card-top">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="card-q-no">Q${card.no}</span>
+          ${roughTag}
+        </div>
+        ${statusBadge}
+      </div>
+      <div class="card-full-text">${card.text}</div>
+      <div class="card-mech-text">🔗 2장 작동기제: ${card.mech}</div>
+      <div class="quick-assign-bar">
+        <span class="quick-assign-label">원클릭:</span>
+        ${quickButtonsHtml}
+        ${isPlaced ? `<button class="btn-unassign-card" onclick="unassignCard(${card.id})" title="피라미드에서 배치 해제">배치 취소 ✕</button>` : ''}
+      </div>
+    `;
+
+    cardEl.addEventListener('dragstart', (e) => {
+      draggedCardId = card.id;
+      e.dataTransfer.setData('text/plain', card.id);
+    });
+
+    container.appendChild(cardEl);
+  });
+}
+
+function quickAssign(cardId, targetScore) {
+  const currentInCol = Object.entries(gridPlacement).filter(([_, sc]) => sc === targetScore);
+  const maxQuota = PYRAMID_QUOTAS[targetScore];
+
+  if (currentInCol.length >= maxQuota && gridPlacement[cardId] !== targetScore) {
+    showToast(`[${targetScore}] 열은 이미 정원(${maxQuota}칸)이 모두 찼습니다.`, 'warn');
+    return;
+  }
+
+  gridPlacement[cardId] = targetScore;
+  renderPyramidBoard();
+  renderRightStatementList();
+}
+
+function unassignCard(cardId) {
+  delete gridPlacement[cardId];
+  renderPyramidBoard();
+  renderRightStatementList();
+}
+
+function renderPyramidBoard() {
+  const board = document.getElementById('pyramid-board');
+  if (!board) return;
+  board.innerHTML = '';
+
+  const scores = ["-4", "-3", "-2", "-1", "0", "+1", "+2", "+3", "+4"];
+
+  scores.forEach(score => {
+    const maxQuota = PYRAMID_QUOTAS[score];
+    const col = document.createElement('div');
+    col.className = 'pyramid-column';
+
+    // Count currently placed cards in this column
+    const cardsInCol = Object.entries(gridPlacement).filter(([_, sc]) => sc === score);
+    const isFull = cardsInCol.length === maxQuota;
+
+    let headerClass = score.startsWith('-') ? 'neg' : (score === '0' ? 'zero' : 'pos');
+    let signSymbol = score.startsWith('+') ? score : score;
+
+    col.innerHTML = `
+      <div class="col-header ${headerClass}" style="${isFull ? 'outline: 2px solid #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.3);' : ''}">
+        ${signSymbol}
+        <span class="col-quota" style="${isFull ? 'color:#15803d; font-weight:800;' : ''}">
+          ${isFull ? '✓ 정원 마감' : `(${cardsInCol.length} / ${maxQuota}칸)`}
+        </span>
+      </div>
+    `;
+
+    // Render Slots (Top-to-Bottom based on maxQuota)
+    for (let slotIndex = 0; slotIndex < maxQuota; slotIndex++) {
+      const slot = document.createElement('div');
+      slot.className = 'grid-slot';
+      slot.dataset.score = score;
+      slot.dataset.slotIndex = slotIndex;
+
+      // If a card is assigned to this slot
+      if (cardsInCol[slotIndex]) {
+        const cardId = parseInt(cardsInCol[slotIndex][0]);
+        const card = Q_STATEMENTS.find(c => c.id === cardId);
+        slot.classList.add('filled');
+        slot.innerHTML = `
+          <div class="slot-card" draggable="true" data-card-id="${card.id}" title="${card.text}">
+            <span style="position:absolute; top:2px; right:4px; font-size:10px; color:#ef4444; font-weight:bold; cursor:pointer;" onclick="unassignCard(${card.id}); event.stopPropagation();" title="배치 취소">✕</span>
+            <span class="card-id">Q${card.no}</span>
+            <span class="card-snippet">${card.text}</span>
+          </div>
+        `;
+
+        const cardElem = slot.querySelector('.slot-card');
+        cardElem.addEventListener('dragstart', (e) => {
+          draggedCardId = card.id;
+          e.dataTransfer.setData('text/plain', card.id);
+        });
+
+        cardElem.addEventListener('click', (e) => {
+          showCardModal(card.id, e);
+        });
+      }
+
+      // Drag & Drop Listeners with non-intrusive full column feedback
+      slot.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const curInCol = Object.entries(gridPlacement).filter(([_, sc]) => sc === score);
+        const colFull = (curInCol.length >= maxQuota) && (gridPlacement[draggedCardId] !== score);
+        if (colFull) {
+          e.dataTransfer.dropEffect = 'none';
+          slot.classList.add('full-drop-blocked');
+        } else {
+          e.dataTransfer.dropEffect = 'move';
+          slot.classList.add('drag-over');
+        }
+      });
+
+      slot.addEventListener('dragleave', () => {
+        slot.classList.remove('drag-over');
+        slot.classList.remove('full-drop-blocked');
+      });
+
+      slot.addEventListener('drop', (e) => {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        slot.classList.remove('full-drop-blocked');
+        const cId = parseInt(e.dataTransfer.getData('text/plain') || draggedCardId);
+        if (!cId) return;
+
+        // Check if destination column is full
+        const currentInCol = Object.entries(gridPlacement).filter(([_, sc]) => sc === score);
+        if (currentInCol.length >= maxQuota && gridPlacement[cId] !== score) {
+          showToast(`[${score}] 열은 이미 정원(${maxQuota}칸)이 모두 찼습니다.`, 'warn');
+          return;
+        }
+
+        gridPlacement[cId] = score;
+        renderPyramidBoard();
+        renderRightStatementList();
+      });
+
+      col.appendChild(slot);
+    }
+
+    board.appendChild(col);
+  });
+}
+
+// Card Modal
+function showCardModal(id, e) {
+  if (e) e.stopPropagation();
+  const card = Q_STATEMENTS.find(c => c.id === id);
+  if (!card) return;
+  document.getElementById('m-card-id').innerText = `진술문 Q${card.no} (${card.dim})`;
+  document.getElementById('m-card-text').innerText = card.text;
+  document.getElementById('m-card-mech').innerText = `🔗 2장 작동기제: ${card.mech}`;
+  document.getElementById('card-modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('card-modal').style.display = 'none';
+}
+
+// ==============================================================================
+// 5. Step 4: Qualitative & KenQ Dataset
+// ==============================================================================
+function renderQualitativeStatements() {
+  // Find cards in +4 and -4
+  const posCards = Object.entries(gridPlacement)
+    .filter(([_, score]) => score === "+4")
+    .map(([cId]) => Q_STATEMENTS.find(c => c.id === parseInt(cId)));
+
+  const negCards = Object.entries(gridPlacement)
+    .filter(([_, score]) => score === "-4")
+    .map(([cId]) => Q_STATEMENTS.find(c => c.id === parseInt(cId)));
+
+  document.getElementById('pos-selected-items').innerHTML = posCards.map(c => `• [Q${c.no}] ${c.text}`).join('<br/>');
+  document.getElementById('neg-selected-items').innerHTML = negCards.map(c => `• [Q${c.no}] ${c.text}`).join('<br/>');
+}
+
+function generateKenQDataset() {
+  const pName = document.getElementById('pName').value.trim() || "P01";
+  const pGroup = document.getElementById('pGroup').value || "GroupA";
+  
+  // Array of scores sorted by Q01 to Q36
+  const scoreList = [];
+  for (let i = 1; i <= 36; i++) {
+    scoreList.push(gridPlacement[i] || "0");
+  }
+
+  // KenQ Format: ID Group Score1 Score2 ... Score36
+  const kenqLine = `${pName}_${pGroup.substring(0, 6)} ` + scoreList.join(' ');
+  document.getElementById('kenqRawData').value = kenqLine;
+}
+
+function copyKenQData() {
+  const data = document.getElementById('kenqRawData');
+  data.select();
+  document.execCommand('copy');
+  showToast("KenQ 포맷 데이터가 클립보드에 복사되었습니다!", "success");
+}
+
+function downloadCSV() {
+  const pName = document.getElementById('pName').value.trim() || "Respondent";
+  const pGroup = document.getElementById('pGroup').value;
+  const pExp = document.getElementById('pExp').value;
+  const posReason = document.getElementById('posReason').value.replace(/"/g, '""');
+  const negReason = document.getElementById('negReason').value.replace(/"/g, '""');
+
+  let csvContent = "\uFEFFCard_ID,Statement,Dimension,Assigned_Score\n";
+  for (let i = 1; i <= 36; i++) {
+    const card = Q_STATEMENTS.find(c => c.id === i);
+    const score = gridPlacement[i];
+    csvContent += `"${card.no}","${card.text.replace(/"/g, '""')}","${card.dim}","${score}"\n`;
+  }
+
+  csvContent += `\n"Respondent_ID","${pName}"\n`;
+  csvContent += `"Group","${pGroup}"\n`;
+  csvContent += `"Experience","${pExp}"\n`;
+  csvContent += `"Positive_Reason(+4)","${posReason}"\n`;
+  csvContent += `"Negative_Reason(-4)","${negReason}"\n`;
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `NIMS_QSort_${pName}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function getResponseDataObject() {
+  const pName = document.getElementById('pName').value.trim() || "Respondent";
+  const pGroup = document.getElementById('pGroup').value || "GroupA";
+  const pExp = document.getElementById('pExp').value;
+  const posReason = document.getElementById('posReason').value.trim();
+  const negReason = document.getElementById('negReason').value.trim();
+  const freeComments = document.getElementById('freeComments').value.trim();
+
+  // scores mapping
+  const scoresMap = {};
+  const scoresArray = [];
+  for (let i = 1; i <= 36; i++) {
+    const sc = parseInt(gridPlacement[i] || 0);
+    const no = (i < 10 ? "0" : "") + i;
+    scoresMap[`Q${no}`] = sc;
+    scoresArray.push(sc);
+  }
+
+  // pyramid placement
+  const pyramidPlacement = { "-4":[], "-3":[], "-2":[], "-1":[], "0":[], "+1":[], "+2":[], "+3":[], "+4":[] };
+  for (let i = 1; i <= 36; i++) {
+    const sc = gridPlacement[i];
+    if (sc) {
+      pyramidPlacement[sc].push((i < 10 ? "0" : "") + i);
+    }
+  }
+
+  return {
+    metadata: {
+      study: "NIMS 핵심 재난지휘 관리원칙에 대한 전문가 인식 유형 분석",
+      course: "현장지휘론 (대학원 기말 연구 프로젝트)",
+      researcher: "강석균 (2678125)",
+      totalStatements: 36,
+      scale: "-4 to +4 (9-point quasi-normal forced distribution)",
+      submittedAt: new Date().toISOString()
+    },
+    respondent: {
+      id: pName,
+      group: pGroup,
+      experience: pExp
+    },
+    scoresMap: scoresMap,
+    scoresArray: scoresArray,
+    kenqLine: `${pName}_${pGroup.substring(0, 6)} ` + scoresArray.join(' '),
+    pyramidPlacement: pyramidPlacement,
+    qualitativeInterview: {
+      positiveStatements: pyramidPlacement["+4"],
+      positiveReason: posReason,
+      negativeStatements: pyramidPlacement["-4"],
+      negativeReason: negReason,
+      freeComments: freeComments
+    }
+  };
+}
+
+function downloadJSON() {
+  const data = getResponseDataObject();
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const cleanId = data.respondent.id.replace(/[^a-zA-Z0-9가-힣_]/g, '');
+  const cleanGrp = data.respondent.group.split('_')[0];
+  link.setAttribute("href", url);
+  link.setAttribute("download", `NIMS_QSort_${cleanId}_${cleanGrp}.json`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function submitFinalResponse() {
+  const posReason = document.getElementById('posReason').value.trim();
+  const negReason = document.getElementById('negReason').value.trim();
+
+  if (!posReason || !negReason) {
+    showToast("+4와 -4 진술문에 대한 선택 이유를 모두 작성해 주셔야 합니다.", "warn");
+    return;
+  }
+
+  downloadJSON();
+  showToast("🎉 Q-소팅 완료! 결과 JSON 파일이 다운로드되었습니다.", "success");
+}
+
+// ==============================================================================
+// 6. 연구자 전용 16인 응답 JSON 통합 집계기 로직
+// ==============================================================================
+let loadedResponses = [];
+
+function openAggregatorModal() {
+  document.getElementById('aggregator-modal').style.display = 'flex';
+}
+
+function closeAggregatorModal() {
+  document.getElementById('aggregator-modal').style.display = 'none';
+}
+
+function handleJSONFiles(files) {
+  if (!files || files.length === 0) return;
+
+  loadedResponses = [];
+  let readCount = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const json = JSON.parse(e.target.result);
+        if (json.respondent && json.scoresArray && json.scoresArray.length === 36) {
+          loadedResponses.push(json);
+        }
+      } catch (err) {
+        console.error("JSON 파싱 오류:", file.name, err);
+      }
+
+      readCount++;
+      if (readCount === files.length) {
+        renderAggregatorResults();
+      }
+    };
+    reader.readAsText(file);
+  }
+}
+
+function renderAggregatorResults() {
+  document.getElementById('aggregator-results').style.display = 'block';
+  document.getElementById('loaded-count').innerText = loadedResponses.length;
+
+  const tbody = document.getElementById('aggregator-table-body');
+  tbody.innerHTML = '';
+
+  const groupCounts = { GroupA: 0, GroupB: 0, GroupC: 0, GroupD: 0 };
+
+  loadedResponses.forEach(r => {
+    const grpKey = r.respondent.group.split('_')[0];
+    if (grpKey in groupCounts) groupCounts[grpKey]++;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${r.respondent.id}</strong></td>
+      <td><span style="background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px; font-size:0.75rem;">${r.respondent.group}</span></td>
+      <td>${r.respondent.experience}</td>
+      <td style="color:#64748b; font-size:0.78rem;">${new Date(r.metadata.submittedAt).toLocaleString()}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Verify Strata (4x4 = 16)
+  const badge = document.getElementById('strata-status-badge');
+  const allGroupsMet = Object.values(groupCounts).every(c => c >= 4);
+  if (loadedResponses.length === 16 && allGroupsMet) {
+    badge.style.background = '#dcfce7';
+    badge.style.color = '#15803d';
+    badge.innerText = '✅ 16명 층화표집 100% 충족';
+  } else {
+    badge.style.background = '#fef3c7';
+    badge.style.color = '#92400e';
+    badge.innerText = `소방:${groupCounts.GroupA}명 / 행정:${groupCounts.GroupB}명 / 인프라:${groupCounts.GroupC}명 / 학술:${groupCounts.GroupD}명`;
+  }
+
+  // Combined KenQ matrix
+  const kenqLines = loadedResponses.map(r => r.kenqLine).join('\n');
+  document.getElementById('combined-kenq-data').value = kenqLines;
+}
+
+function copyCombinedKenQ() {
+  const box = document.getElementById('combined-kenq-data');
+  box.select();
+  document.execCommand('copy');
+  showToast("16인 통합 KenQ 데이터셋이 클립보드에 복사되었습니다!", "success");
+}
+
+function downloadCombinedKenQ() {
+  const kenqLines = document.getElementById('combined-kenq-data').value;
+  if (!kenqLines) {
+    showToast("취합된 데이터가 없습니다.", "warn");
+    return;
+  }
+  const blob = new Blob([kenqLines], { type: 'text/plain;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `NIMS_16_KenQ_Dataset.dat`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadCombinedCSV() {
+  if (loadedResponses.length === 0) {
+    showToast("취합된 데이터가 없습니다.", "warn");
+    return;
+  }
+
+  let csv = "\uFEFFRespondent_ID,Group,Experience,Submission_Time,";
+  for (let i = 1; i <= 36; i++) {
+    csv += `Q${i < 10 ? '0' : ''}${i},`;
+  }
+  csv += "Positive_Reason(+4),Negative_Reason(-4),Free_Comments\n";
+
+  loadedResponses.forEach(r => {
+    csv += `"${r.respondent.id}","${r.respondent.group}","${r.respondent.experience}","${r.metadata.submittedAt}",`;
+    for (let i = 1; i <= 36; i++) {
+      const no = `Q${i < 10 ? '0' : ''}${i}`;
+      csv += `${r.scoresMap[no] || 0},`;
+    }
+    const pos = (r.qualitativeInterview.positiveReason || "").replace(/"/g, '""');
+    const neg = (r.qualitativeInterview.negativeReason || "").replace(/"/g, '""');
+    const free = (r.qualitativeInterview.freeComments || "").replace(/"/g, '""');
+    csv += `"${pos}","${neg}","${free}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `NIMS_16_Combined_Analysis.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Initial load
+updateRoughCard();
+</script>
+
+</body>
+</html>

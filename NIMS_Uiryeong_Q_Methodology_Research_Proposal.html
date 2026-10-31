@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIMS 기반 긴급구조 및 다기관 협업체계에 대한 소방공무원의 주관적 인식 유형 연구 계획서 (의령소방서)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        fontFamily: 'Pretendard, sans-serif'
+      });
+    });
+  </script>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #172554;
+      --accent: #dc2626; /* 소방의 상징 레드 */
+      --accent-subtle: #fef2f2;
+      --accent-border: #fecaca;
+      --blue-accent: #2563eb;
+      --blue-subtle: #eff6ff;
+      --blue-border: #bfdbfe;
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --text-main: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --sidebar-width: 300px;
+      --header-height: 64px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header Nav */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .site-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+
+    .badge-lms {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: var(--blue-subtle);
+      color: var(--blue-accent);
+      border: 1px solid var(--blue-border);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-action {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid var(--border-dark);
+      background: white;
+      color: var(--text-main);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--bg-page);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      color: white;
+    }
+
+    /* Container Layout */
+    .layout-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(var(--header-height) + 1.5rem);
+      height: calc(100vh - var(--header-height) - 3rem);
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    .toc-card {
+      background: var(--bg-surface);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .toc-card h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-list li {
+      margin-bottom: 0.35rem;
+    }
+
+    .toc-list a {
+      color: var(--text-body);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: block;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      line-height: 1.4;
+    }
+
+    .toc-list a:hover {
+      background: var(--blue-subtle);
+      color: var(--blue-accent);
+      font-weight: 500;
+    }
+
+    .toc-list .sub-item {
+      padding-left: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      background: var(--bg-surface);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 3.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -2px rgba(0,0,0,0.02);
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .sub-title {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 1.75rem;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 3.5rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      line-height: 1.85;
+    }
+
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.75;
+    }
+
+    strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: var(--border-color);
+      margin: 2.5rem 0;
+    }
+
+    /* Alerts and Callouts */
+    .callout {
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.75rem 0;
+      border-left: 4px solid;
+    }
+
+    .callout-important {
+      background: #fef2f2;
+      border-left-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .callout-important strong {
+      color: #7f1d1d;
+    }
+
+    .callout-note {
+      background: var(--blue-subtle);
+      border-left-color: var(--blue-accent);
+      color: #1e40af;
+    }
+
+    .callout-note strong {
+      color: #1e3a8a;
+    }
+
+    .callout-tip {
+      background: #f0fdf4;
+      border-left-color: #22c55e;
+      color: #166534;
+    }
+
+    .callout-tip strong {
+      color: #14532d;
+    }
+
+    /* Executive Summary Table */
+    .summary-card {
+      background: linear-gradient(145deg, #f8fafc, #eff6ff);
+      border: 1px solid var(--blue-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+    }
+
+    .summary-table th, .summary-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.95rem;
+    }
+
+    .summary-table th {
+      width: 22%;
+      color: var(--primary);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .summary-table tr:last-child th, .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Data Tables */
+    .data-table-wrapper {
+      overflow-x: auto;
+      margin: 1.75rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: #f1f5f9;
+      color: var(--text-main);
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    table.data-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    table.data-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    /* Statement Item Cards */
+    .statement-group {
+      margin-top: 2rem;
+    }
+
+    .statement-group-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #f1f5f9;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .statement-card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 0.85rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .statement-card:hover {
+      border-color: var(--blue-accent);
+      box-shadow: 0 4px 6px -1px rgba(37,99,235,0.06);
+    }
+
+    .statement-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .statement-id {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .statement-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .statement-body {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+      line-height: 1.6;
+    }
+
+    .statement-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: #f8fafc;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .statement-meta span strong {
+      color: var(--text-body);
+    }
+
+    /* Distribution Grid Diagram */
+    .grid-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* Print Styles */
+    @media print {
+      .site-header, .sidebar, .header-actions {
+        display: none !important;
+      }
+      .layout-container {
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .main-content {
+        border: none;
+        box-shadow: none;
+        padding: 1cm;
+      }
+      h2 {
+        page-break-before: always;
+      }
+      .statement-card {
+        page-break-inside: avoid;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+      .layout-container {
+        padding: 1rem;
+      }
+      .main-content {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="site-title">
+      <span>🚒 NIMS 기반 주관성 연구계획서</span>
+      <span class="badge-tag">의령소방서 실무진·지휘관 P표본</span>
+      <span class="badge-lms">LMS 등록 제출용</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-action" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+      <a href="NIMS_Uiryeong_Q_Methodology_Research_Proposal.md" class="btn-action">📄 원본 MD 보기</a>
+    </div>
+  </header>
+
+  <div class="layout-container">
+    <!-- Sidebar / TOC -->
+    <aside class="sidebar">
+      <div class="toc-card">
+        <h3>Contents (목차)</h3>
+        <ul class="toc-list">
+          <li><a href="#summary">📋 연구계획 개요 (Summary)</a></li>
+          <li><a href="#sec-1">제1장 서론 (Introduction)</a>
+            <ul>
+              <li><a href="#sec-1-1" class="sub-item">1.1 도농복합 소방 현실과 협업</a></li>
+              <li><a href="#sec-1-2" class="sub-item">1.2 주관성(Q) 연구의 필요성</a></li>
+              <li><a href="#sec-1-3" class="sub-item">1.3 🚨 왜 한국에 NIMS 진술문인가?</a></li>
+              <li><a href="#sec-1-4" class="sub-item">1.4 연구 목적 및 핵심 연구 질문</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec-2">제2장 이론적 배경 & NIMS 매핑</a>
+            <ul>
+              <li><a href="#sec-2-1" class="sub-item">2.1 NIMS 1~8장 핵심 연계표</a></li>
+              <li><a href="#sec-2-2" class="sub-item">2.2 법령 조문 단위 매핑</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec-3">제3장 연구 설계 및 방법론</a>
+            <ul>
+              <li><a href="#sec-3-1" class="sub-item">3.1 Q방법론 연구 흐름도</a></li>
+              <li><a href="#sec-3-2" class="sub-item">3.2 4×3 매트릭스 표본 설계</a></li>
+              <li><a href="#sec-3-3" class="sub-item">3.3 36개 Q 진술문 전수 (★)</a></li>
+              <li><a href="#sec-3-4" class="sub-item">3.4 의령소방서 P표본 층화(16명)</a></li>
+              <li><a href="#sec-3-5" class="sub-item">3.5 9점 척도 정규분포표</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec-4">제4장 분석 및 예상 유형</a>
+            <ul>
+              <li><a href="#sec-4-1" class="sub-item">4.1 4대 가설 주관성 유형</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec-5">제5장 다차원적 기대효과 (★)</a>
+            <ul>
+              <li><a href="#sec-5-1" class="sub-item">5.1 학술적·이론적 기대효과</a></li>
+              <li><a href="#sec-5-2" class="sub-item">5.2 국가 정책·제도적 기대효과</a></li>
+              <li><a href="#sec-5-3" class="sub-item">5.3 의령소방서 실무 기대효과</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec-6">제6장 추진일정 & 윤리</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <div id="summary">
+        <h1>NIMS 기반 현장대응 및 다기관 협업체계에 대한<br>소방공무원의 주관적 인식 유형 연구 계획서</h1>
+        <div class="sub-title">도농복합·농어촌 지역(경남 의령소방서) 실무진 및 지휘관 대상 Q방법론적 접근</div>
+
+        <div class="callout callout-important">
+          <strong>🚨 [지도교수 중점 지도사항 반영 안내]</strong><br>
+          본 연구계획서는 <strong>미국 FEMA NIMS (2017 제3판) 제1장~제8장 교재 체계를 바탕으로 Q 진술문을 정밀 도출</strong>하여 주관성 연구의 학술적 완성도를 극대화하였으며, <strong>① 한국 긴급구조체계에 왜 NIMS 기반 진술문이 필수적인가(한국적 적용 당위성)</strong>와 <strong>② NIMS 체계 적용을 통한 다차원적 기대효과(학술·정책·의령소방서 실무)</strong>를 엄밀히 규명하여 LMS 등록 기준에 맞추어 작성되었습니다.
+        </div>
+
+        <div class="summary-card">
+          <table class="summary-table">
+            <tr>
+              <th>연구과제명</th>
+              <td><strong>NIMS(National Incident Management System) 기반 긴급구조 및 다기관 협업체계에 대한 소방공무원의 주관적 인식 유형 분석: 경남 의령소방서를 중심으로</strong></td>
+            </tr>
+            <tr>
+              <th>연구방법론</th>
+              <td><strong>주관성 연구방법론 (Q-Methodology)</strong></td>
+            </tr>
+            <tr>
+              <th>이론적 토대</th>
+              <td>미국 FEMA NIMS 2017 (제1장~제8장), 사회적 의미구성(Sensemaking), 네트워크 조직이론, 다차원적 성과(Multidimensional Performance)</td>
+            </tr>
+            <tr>
+              <th>법적 근거</th>
+              <td>「재난 및 안전관리 기본법」 제50조~제55조, 「소방기본법」 제16조, 「긴급구조대응활동 및 현장지휘에 관한 규칙」(소방청령)</td>
+            </tr>
+            <tr>
+              <th>P 표본 (대상)</th>
+              <td><strong>경남 의령소방서 소속 소방공무원 16명</strong> (전체 정원 약 100명 중 4대 핵심 직무군별 4명씩 4×4 균등 층화표집)</td>
+            </tr>
+            <tr>
+              <th>Q 표본 (진술문)</th>
+              <td><strong>구조화된 36개 Q 진술문</strong> (NIMS 3대 축 × 재난 생애주기 4단계 매트릭스 설계)</td>
+            </tr>
+            <tr>
+              <th>분석 도구</th>
+              <td>PQMethod Release 2.35 및 Ken-Q Analysis (PCA 주성분분석 & Varimax 직교회전)</td>
+            </tr>
+            <tr>
+              <th>연구자 특성</th>
+              <td><strong>현직 의령소방서 재직 실무 연구자(Practitioner-Researcher)</strong>에 의한 내부 실증 연구</td>
+            </tr>
+            <tr>
+              <th>연구 기간</th>
+              <td><strong>2026년 11월 (총 4주 완성 단기 집중 프로젝트 / 「현장지휘론」 기말과제)</strong></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 제1장 서론 -->
+      <section id="sec-1">
+        <h2>제1장 서론 (Introduction)</h2>
+
+        <h3 id="sec-1-1">1.1 도농복합·농어촌 지역 소방력의 현실적 한계와 다기관 협업의 불가피성</h3>
+        <ul>
+          <li><strong>지리적·인구적 취약성:</strong> 경상남도 의령군은 전형적인 산악·농촌 지형이 혼재된 도농복합 지역으로, 초고령화와 넓은 관할 면적 대비 소방 인력과 가용 특수 장비의 자원 보유량(Resource Endowment)이 대도시 소방서 대비 절대적으로 부족합니다.</li>
+          <li><strong>사건 복잡성의 증대:</strong> 대형 산불, 급경사지 붕괴, 농공단지 공장화재, 국도변 다수사상자 교통사고 등 현대 재난은 단일 소방서만의 힘으로는 해결할 수 없는 복합 재난(Complex Incidents) 형태로 전개됩니다.</li>
+          <li><strong>광역 상호원조와 지휘조정의 핵심성:</strong> 따라서 인접 관서(함안, 합천, 진주, 창녕 등)의 광역 응원출동(Mutual Aid), 의령군청(EOC/재난안전대책본부), 의령경찰서, 군부대(제39사단) 간의 유기적인 통합지휘(Unified Command)와 통신 상호운용성(Interoperability) 확보가 필수적입니다.</li>
+        </ul>
+
+        <h3 id="sec-1-2">1.2 소방공무원 주관성(Subjectivity) 연구의 필요성</h3>
+        <p>현장 재난대응 매뉴얼과 법률이 정교하게 완비되어 있더라도, 초를 다투는 긴박한 위기 상황에서 그 제도가 작동하느냐를 결정하는 것은 결국 현장 대원과 지휘관의 <strong>'주관적 지각(Perception)'</strong>과 <strong>'상황에 대한 의미구성(Sensemaking)'</strong>입니다. 일선 진압대원, 구조·구급대원, 지휘조사팀, 내근 행정요원이 서로 체감하는 우선순위와 갈등 지점을 계량적으로 규명하지 않고서는 실효성 있는 대응 혁신이 불가능합니다.</p>
+
+        <h3 id="sec-1-3">1.3 🚨 [지도교수 중점 지도사항] 한국 긴급구조체계에 왜 NIMS 체계 기반의 진술문이 필수적인가? (한국적 적용 당위성)</h3>
+        <p>본 연구가 단순한 소방 설문이 아닌, <strong>미국 FEMA NIMS(2017) 제1장~제8장 교재 체계를 엄밀한 뼈대로 삼아 Q 진술문을 도출하는 학술적·실무적 당위성</strong>은 다음 3대 요인으로 규명됩니다:</p>
+
+        <div class="mermaid">
+flowchart TD
+    subgraph KOREA["한국 소방·긴급구조의 고질적 한계"]
+        K1["외형적 제도 도입 vs 현장 작동의 괴리<br/>(통제단 가동 시 다기관 지휘권 혼선)"]
+        K2["자원 분류 표준(Typing) 부재<br/>(광역 응원출동 시 장비·역량 불일치)"]
+        K3["통신망(PS-LTE) 구축 불구 은어 남발<br/>(평이한 언어 Plain Language 미흡)"]
+    end
+
+    subgraph NIMS_BENCHMARK["NIMS 1~8장 교재 기반 표준 준거틀"]
+        N1["제3장 지휘조정: 14대 관리특성, MBO, IAP, 통제범위(1:3~7)"]
+        N2["제2장 자원관리: 자원유형화(Typing), 자격인증, 상호원조(Mutual Aid)"]
+        N3["제4장 통신정보: Plain Language, 단일 통신망, 합동정보센터(JIC)"]
+    end
+
+    subgraph Q_VALUE["주관성 연구(Q) 완성도 극대화 기여"]
+        Q1["[내용타당도 확립] 단순 인상비평 탈피, 글로벌 표준 기준의 진술문화"]
+        Q2["[병목 진단] 현장 대원의 '의미구성(Sensemaking)'과 제도 간 괴리 실증"]
+        Q3["[한국형 K-NIMS 도출] 농어촌(의령) 현장 맞춤형 고유/협업 KPI 설계"]
+    end
+
+    K1 --> N1 --> Q1
+    K2 --> N2 --> Q2
+    K3 --> N3 --> Q3
+        </div>
+
+        <ol>
+          <li><strong>외형적 제도 도입(Structural Decoupling)의 극복을 위한 글로벌 표준 잣대:</strong><br>
+            한국은 미국 NIMS의 핵심 하위체계인 ICS(현장지휘체계)를 벤치마킹하여 긴급구조통제단 제도를 법제화했으나, 실제 현장에서는 서식과 직제만 모방했을 뿐 <strong>NIMS가 규정한 14대 핵심 관리특성(모듈형 확장, 적정 통제범위 3~7명, 서면 사건행동계획 IAP, 단일·통합지휘)의 작동 원리가 대원들의 행동 양식으로 내재화되지 못하는 구조적 괴리</strong>를 겪고 있습니다. NIMS 교재에 정립된 확고한 원리와 표준 용어를 토대로 진술문을 도출해야만 한국 긴급구조체계의 병목 지점을 정확히 진단할 수 있습니다.</li>
+          <li><strong>주관성 연구(Q)의 내용타당도(Content Validity) 및 학술적 완성도 제고:</strong><br>
+            연구자의 주관적 편향이나 일선 대원들의 단순 불만(인상비평)에 의존한 진술문은 학술적 신뢰도가 떨어집니다. **NIMS 제1장(기본원리)부터 제2장(자원관리), 제3장(지휘조정), 제4장(통신관리), 제6~8장(용어·법령 리소스)**에 이르는 전 챕터의 정밀 분석 데이터를 진술문으로 체계화함으로써 Q 모집단의 학술적 무결성과 구조적 내용타당도를 완벽히 확보합니다.</li>
+          <li><strong>다기관 협업 상호운용성(Interoperability)의 실질적 측정:</strong><br>
+            수조 원의 재난안전통신망(PS-LTE)이 보급되었음에도 소방-경찰-지자체 간 무전 은어 사용, 지휘권 갈등, 정보 비대칭이 상존합니다. NIMS의 **평이한 언어(Plain Language), 자원 유형화(Resource Typing), 합동정보시스템(JIS), 다기관조정그룹(MAC Group)** 개념을 진술문에 투영하여, 일선 공무원들이 다기관 협업을 실제로 어떻게 지각(Perception)하고 평가(Evaluation)하는지 실증적으로 측정합니다.</li>
+        </ol>
+
+        <h3 id="sec-1-4">1.4 연구 목적 및 핵심 연구 질문 (Research Questions)</h3>
+        <p><strong>[연구 목적]</strong> NIMS 1~8장 프레임워크와 한국 소방 법령을 접목하여 의령소방서 직원들의 주관적 인식 유형을 도출하고, 유형 간 합의와 갈등 요인을 분석하여 현장 밀착형 지휘역량 강화 및 협업 성과지표(KPI)를 제언합니다.</p>
+        <ul>
+          <li><strong>RQ 1:</strong> NIMS 프레임워크 관점에서 의령소방서 대원 및 지휘관들이 인식하는 재난대응 핵심 우선순위 유형은 어떻게 구조화되는가?</li>
+          <li><strong>RQ 2:</strong> 계급(대원 vs 초급간부 vs 지휘관), 보직(진압/구조 vs 지휘조사 vs 행정)에 따라 다기관 협업과 지휘권에 대한 인식 차이가 어떻게 나타나는가?</li>
+          <li><strong>RQ 3:</strong> 유형 간 공통적으로 동의하는 합의 진술문(Consensus)과 대립하는 차별 진술문(Distinguishing)은 무엇이며, 현장 개선점은 무엇인가?</li>
+        </ul>
+      </section>
+
+      <!-- 제2장 이론적 배경 -->
+      <section id="sec-2">
+        <h2>제2장 이론적 배경 및 NIMS 1~8장 분석 매핑</h2>
+
+        <h3 id="sec-2-1">2.1 NIMS 2017 챕터별 핵심 내용 및 본 연구와의 연계성</h3>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 18%;">NIMS 장 (Chapter)</th>
+                <th style="width: 32%;">원문 핵심 개념 (Key Concepts)</th>
+                <th style="width: 30%;">소방 실무 매핑 포인트</th>
+                <th style="width: 20%;">연구 반영 영역</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>제1장 기본원리</strong></td>
+                <td>유연성(Flexibility), 표준화(Standardization), 노력의 통일성(Unity of Effort), 3대 우선순위(인명구조, 상황안정, 재산보호)</td>
+                <td>소방대응의 불변 가치 및 산악·공장 재난 대응의 유연한 조직 확장성</td>
+                <td>대응 철학 및 행동 규범</td>
+              </tr>
+              <tr>
+                <td><strong>제2장 자원 관리</strong></td>
+                <td>자원 유형화(Typing), 자격인증(Credentialing), 자원 6단계, 상호원조(Mutual Aid)</td>
+                <td>함안·합천 등 인접 서 응원출동 및 의령군 중장비·민간 장비 신속 동원</td>
+                <td>상호원조 및 자원 추적</td>
+              </tr>
+              <tr>
+                <td><strong>제3장 지휘 및 조정</strong></td>
+                <td>14대 관리특성, ICS 지휘체계, 통합지휘(UC), 통제범위(1:3~7), EOC/MAC 연계</td>
+                <td>소방서장(통제단장) 지휘권, 의령군 재대본과의 역할 분담, 경찰 공조</td>
+                <td>현장지휘소 및 통합지휘</td>
+              </tr>
+              <tr>
+                <td><strong>제4장 통신정보관리</strong></td>
+                <td>공통 용어(Common Terminology), 평이한 언어(Plain Language), 통신 상호운용성, IAP</td>
+                <td>재난안전통신망(PS-LTE) 무전 표준화, 은어 배제, 합동 브리핑</td>
+                <td>무전 교신 및 정보 공유</td>
+              </tr>
+              <tr>
+                <td><strong>제5장 결론</strong></td>
+                <td>전 지역사회(Whole Community) 통합, 지속적 훈련 및 연습(Exercises)</td>
+                <td>의령군 의용소방대, 민간자원봉사자 연계 및 통제단 불시 가동 훈련</td>
+                <td>지역사회 협력 및 역량강화</td>
+              </tr>
+              <tr>
+                <td><strong>제6장 용어 해설</strong></td>
+                <td>142개 공식 표준 용어, 계층별 직함 표준화(Command Staff, Section Chief 등)</td>
+                <td>지휘관-참모-담당관 간의 표준화된 직무 명칭 인지 및 역할 명확화</td>
+                <td>직무 혼선 예방</td>
+              </tr>
+              <tr>
+                <td><strong>제7장 약어 목록</strong></td>
+                <td>52개 표준 약어(AHJ, EOC, IAP, IMT, JIS, MACS, UC 등)</td>
+                <td>전문 약어의 공통 이해 및 재난 보고서·상황판 표준 표기</td>
+                <td>문서화 및 다기관 합동 소통</td>
+              </tr>
+              <tr>
+                <td><strong>제8장 리소스·법령</strong></td>
+                <td>FEMA 가이드라인, ICS 표준 서식(Forms), 국가준비체계(NPS), CPG 101/201</td>
+                <td>재난안전법, 소방청 훈령·규칙 및 표준 ICS 서식의 국내 실무 적용성</td>
+                <td>법적 구속력 및 실행력</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="sec-2-2">2.2 관련 법령 및 규정과의 조문 단위 매핑</h3>
+        <div class="mermaid">
+flowchart TD
+    subgraph LAW["상위 법적 근거 (Statutory Ground)"]
+        L1["「재난 및 안전관리 기본법」<br/>제50조(지역통제단) / 제52조(통제단장 현장지휘)"]
+        L2["「소방기본법」<br/>제11조(소방응원) / 제16조(소방활동)"]
+        L3["「긴급구조대응활동 및 현장지휘 규칙」<br/>제6조~제24조(현장지휘소·통제단 편성)"]
+    end
+
+    subgraph NIMS["NIMS 2017 프레임워크 매핑"]
+        N1["Chapter III. 지휘 및 조정<br/>(Incident Command & Unified Command)"]
+        N2["Chapter II. 자원 관리 & 상호원조<br/>(Resource Management & Mutual Aid)"]
+        N3["Chapter IV. 통신·정보관리<br/>(Plain Language & Common Terminology)"]
+    end
+
+    subgraph FIELD["의령소방서 현장 실무 적용 (Uiryeong Fire Station)"]
+        F1["현장지휘팀 및 통제단 가동<br/>(소방서장 단일·통합 지휘권 행사)"]
+        F2["인근 소방서(함안·합천) 응원출동 및<br/>의령군청 중장비·산림청 헬기 동원"]
+        F3["재난안전통신망(PS-LTE) 단일 통신망 운영 및<br/>경찰·보건소 공통 용어 무전"]
+    end
+
+    L1 --> N1 --> F1
+    L2 --> N2 --> F2
+    L3 --> N3 --> F3
+        </div>
+      </section>
+
+      <!-- 제3장 연구 설계 -->
+      <section id="sec-3">
+        <h2>제3장 연구 설계 및 방법론 (Methodology)</h2>
+
+        <h3 id="sec-3-1">3.1 Q방법론 연구 흐름도</h3>
+        <div class="mermaid">
+flowchart LR
+    Q1["1. Q 모집단 구축<br/>(NIMS 1~8장 서브노트 +<br/>소방 인터뷰 120개 문항)"] --> Q2["2. Q 표본 선정<br/>(36개 구조화된 진술문<br/>4단계 생애주기×3차원)"]
+    Q2 --> Q3["3. P 표본 표집<br/>(의령소방서 직원 16명<br/>4대 직무군×4명 층화)"]
+    Q3 --> Q4["4. Q 소팅 (Q-Sorting)<br/>(9점 척도 정규분포 강제분포<br/>-4 ~ 0 ~ +4)"]
+    Q4 --> Q5["5. 요인분석 및 해석<br/>(PQMethod 주성분분석<br/>유형별 특성 및 시사점)"]
+        </div>
+
+        <h3 id="sec-3-2">3.2 Q 표본(Q-Sample)의 구조화 매트릭스 설계 (4 × 3 Matrix)</h3>
+        <p>재난관리 생애주기 4단계와 NIMS 3대 핵심 축을 직교 교차하여 36개의 균형 잡힌 진술문을 추출하였습니다.</p>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>업무 생애주기 단계</th>
+                <th style="text-align: center;">A. 지휘·통제체계 (ICS)</th>
+                <th style="text-align: center;">B. 자원관리 및 상호원조 (RM)</th>
+                <th style="text-align: center;">C. 통신·정보 및 협업 (C&I)</th>
+                <th style="text-align: center;">합계</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1단계: 예방 및 대비 (Preparedness)</strong></td>
+                <td style="text-align: center;">Q01, Q02, Q03</td>
+                <td style="text-align: center;">Q04, Q05, Q06</td>
+                <td style="text-align: center;">Q07, Q08, Q09</td>
+                <td style="text-align: center;"><strong>9문항</strong></td>
+              </tr>
+              <tr>
+                <td><strong>2단계: 초기대응 및 착수 (Initial Response)</strong></td>
+                <td style="text-align: center;">Q10, Q11, Q12</td>
+                <td style="text-align: center;">Q13, Q14, Q15</td>
+                <td style="text-align: center;">Q16, Q17, Q18</td>
+                <td style="text-align: center;"><strong>9문항</strong></td>
+              </tr>
+              <tr>
+                <td><strong>3단계: 확대대응 및 조정 (Extended Command)</strong></td>
+                <td style="text-align: center;">Q19, Q20, Q21</td>
+                <td style="text-align: center;">Q22, Q23, Q24</td>
+                <td style="text-align: center;">Q25, Q26, Q27</td>
+                <td style="text-align: center;"><strong>9문항</strong></td>
+              </tr>
+              <tr>
+                <td><strong>4단계: 복구 및 철수·평가 (Recovery & Demob)</strong></td>
+                <td style="text-align: center;">Q28, Q29, Q30</td>
+                <td style="text-align: center;">Q31, Q32, Q33</td>
+                <td style="text-align: center;">Q34, Q35, Q36</td>
+                <td style="text-align: center;"><strong>9문항</strong></td>
+              </tr>
+              <tr style="background: #f8fafc; font-weight: 700;">
+                <td>합 계</td>
+                <td style="text-align: center;">12문항</td>
+                <td style="text-align: center;">12문항</td>
+                <td style="text-align: center;">12문항</td>
+                <td style="text-align: center;">36문항</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="sec-3-3">3.3 구조화된 36개 Q 진술문 (Q-Sample Statements) 전수</h3>
+
+        <!-- 1단계 -->
+        <div class="statement-group">
+          <div class="statement-group-title">
+            <span>[1단계] 예방 및 대비 단계 (Preparedness Phase)</span>
+            <span style="font-size: 0.8rem; font-weight: normal;">Q01 ~ Q09 (9문항)</span>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q01</span>
+              <span class="statement-tag">소방 고유 (70%)</span>
+            </div>
+            <div class="statement-body">"현장지휘관의 개인적 직관이나 계급(연공서열)보다는, 사전에 표준화된 평가와 훈련을 거쳐 지휘 역량을 공인하는 '현장지휘관 자격인증제'가 우선 확립되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 1.2 자격·인증·크레덴셜링 (p. 7)</span>
+              <span><strong>법적 근거:</strong> 소방청 현장지휘관 자격인증제 운영규정</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q02</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"관내 농공단지나 전통시장 등 고위험 대상물에 대해, 막연한 지침 대신 단계별 진압 목표와 소방력 투입이 명시된 구체적인 '표준 사전작전계획서'가 수립되어 있어야 실제 출동 시 즉각 작동한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 MBO 및 사건행동계획 (pp. 21, 105)</span>
+              <span><strong>법적 근거:</strong> 「소방기본법」 제8조 및 소방활동 자료조사 규정</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q03</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"의령과 같은 소규모 소방서는 평시에는 간소한 편제로 운영되더라도, 재난 규모 확대 시 즉시 4대 일반참모(작전, 기획, 보급, 재정) 체계로 신속히 팽창할 수 있는 모듈형 확장 체계가 필수적이다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 모듈형 조직 (p. 20) 및 ICS Tab 1</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘에 관한 규칙」 제6조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q04</span>
+              <span class="statement-tag">소방/지자체 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"산악 험로와 좁은 농로가 많은 의령군 지형 특성을 고려하여, 보유 소방장비와 민간 중장비의 성능과 규격을 사전에 명확히 분류하여 자원 목록으로 정리해 두어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 1.1 자원 식별 및 유형화 (pp. 6–7)</span>
+              <span><strong>법적 근거:</strong> 「재난 및 안전관리 기본법」 제34조(재난관리자원 비축)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q05</span>
+              <span class="statement-tag">광역 협업 (70%)</span>
+            </div>
+            <div class="statement-body">"의령의 한정된 소방력 극복을 위해서는 함안·합천·진주 등 인접 소방서와의 상호 응원출동 협약이 단순한 서류상 협약에 그치지 않고, 관할 경계를 넘는 '즉각 자동 공동출동' 체계로 발전해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 3.1 상호원조 협정 (p. 17)</span>
+              <span><strong>법적 근거:</strong> 「소방기본법」 제11조(소방응원) 및 광역 소방응원협정</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q06</span>
+              <span class="statement-tag">민관 협업 (60%)</span>
+            </div>
+            <div class="statement-body">"의령군 의용소방대와 지역 민간단체가 보유한 산화 진화장비, 굴삭기, 트랙터 등 민간 자원의 가용성을 사전 등록 시스템에 상시 연계·관리하는 것이 재난 대비의 핵심이다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 1.4 자원 획득·보관·재고관리 (p. 9)</span>
+              <span><strong>법적 근거:</strong> 「의용소방대 설치 및 운영에 관한 법률」 제7조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q07</span>
+              <span class="statement-tag">기관간 협업 (60%)</span>
+            </div>
+            <div class="statement-body">"경찰, 군부대, 군청 등과의 합동 대응 훈련 시 소방 전용 무전 은어나 복잡한 무전 약어 사용을 금지하고, 누구나 알기 쉬운 표준 일상 용어로 교신하는 것을 의무화해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제4장 3.1 공통 용어 및 평이한 언어 (p. 57)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제74조의2(재난안전통신망 운영)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q08</span>
+              <span class="statement-tag">대외 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"재난 발생 시 군민들의 불안과 가짜뉴스 확산을 막기 위해, 소방과 의령군 공보부서가 단일한 정보를 주민과 언론에 알리는 '공동 언론·공보 협의체'를 사전에 가동해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 5.1 합동정보시스템 (pp. 42–46)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제38조의2(재난 예보·경보 발령)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q09</span>
+              <span class="statement-tag">소방 고유 (70%)</span>
+            </div>
+            <div class="statement-body">"산간 오지 통신 음영구역이 많은 관내 특성을 감안할 때, 주 무전망이 먹통이 될 때를 대비하여 즉각 대체할 수 있는 보조 무전 주파수와 위성통신 훈련이 정기적으로 이루어져야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제4장 1.4 장비 표준 및 통신 탄력성 (p. 53)</span>
+              <span><strong>법적 근거:</strong> 소방청 무전통신 보안 및 운영관리 규정</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2단계 -->
+        <div class="statement-group">
+          <div class="statement-group-title">
+            <span>[2단계] 초기대응 및 현장착수 단계 (Initial Response Phase)</span>
+            <span style="font-size: 0.8rem; font-weight: normal;">Q10 ~ Q18 (9문항)</span>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q10</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"현장 도착 초기 혼란을 막기 위해, 가장 먼저 도착한 선착대장이 계급의 고하를 막론하고 공식적으로 지휘권을 선언하고 지휘 거점을 확보하는 것이 최우선 과제이다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 지휘권 수립 및 인계 (p. 22)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제10조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q11</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"사건 초기 어떠한 전술적 판단이나 재산 보호 조치보다, 현장 출동 대원의 안전과 인명 구조가 절대적인 제1우선순위로 고정되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제1장 1.1 3대 우선순위 (p. 1)</span>
+              <span><strong>법적 근거:</strong> 「소방기본법」 제16조 및 「소방공무원 보건안전법」</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q12</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"초기 현장지휘관 1명이 직접 지휘하는 대원이나 분대 수가 5명을 초과하면 지휘 통제가 무너지므로, 즉시 현장을 구역별·기능별 지휘조로 나누어 중간 지휘관을 두어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 적정 통제범위 (1:3~1:7, p. 21)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제15조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q13</span>
+              <span class="statement-tag">소방/광역지원 (70:30)</span>
+            </div>
+            <div class="statement-body">"농어촌 현장 특성상 응원 지원대가 도착하기까지 상당한 시간이 소요되므로, 선착대장은 현장 확인 즉시 가용 소방력을 과대평가하지 말고 최대 필요 자원을 조기에 선제 요청해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.1 사건 중 필요 자원 식별 (p. 12)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제51조(통제단 운영)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q14</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"응원 출동하는 타 관서 차량과 장비가 현장 주변 진입로를 막지 않도록, 초기 단계부터 현장 인근에 명확한 '소방 자원집결소'를 지정·운영해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 사건 시설 및 집결소 (pp. 22, 31)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제16조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q15</span>
+              <span class="statement-tag">소방 통제권 (80%)</span>
+            </div>
+            <div class="statement-body">"공식 파견 명령 없이 자발적으로 현장에 진입하는 의용소방대나 자원봉사 인력은 지휘부의 사전 등록과 임무 부여 절차를 거치지 않으면 현장 투입을 엄격히 차단해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.3 동원 및 체크인 (p. 15, Self-Dispatch 금지)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제17조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q16</span>
+              <span class="statement-tag">소방/기관간 (70:30)</span>
+            </div>
+            <div class="statement-body">"출동대 및 유관기관 간 상황 인식을 일치시키기 위해, 무전이나 구두 보고에만 의존하지 말고 초기 30분 이내에 표준화된 핵심 상황판단서식(상황요약표)이 공유되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제4장 2.1 사건 보고서 및 ICS Form 201 (pp. 54, 111)</span>
+              <span><strong>법적 근거:</strong> 소방청 상황보고 및 통제단 운영 매뉴얼</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q17</span>
+              <span class="statement-tag">기관간 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"초기 현장 접근로 확보와 군중 통제는 소방 단독으로 불가능하므로, 의령경찰서와의 즉각적인 현장 공조를 통한 출입 통제선 설정이 현장 안정화의 최우선이다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.2 통합지휘 및 지휘참모(안전/보안) (pp. 24, 27)</span>
+              <span><strong>법적 근거:</strong> 「경찰관 직무집행법」 제5조 및 「재난안전법」 제52조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q18</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"급격한 연소 확대나 붕괴 징후 포착 시, 현장 안전점검관(안전담당)은 지휘관의 결재 없이도 대원 대피 및 작전 중지 명령을 즉각 내릴 수 있어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.2 안전담당관의 직무 권한 (pp. 27, 83)</span>
+              <span><strong>법적 근거:</strong> 「소방공무원 보건안전법」 제14조(현장안전점검관)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3단계 -->
+        <div class="statement-group">
+          <div class="statement-group-title">
+            <span>[3단계] 확대대응 및 지휘조정 단계 (Extended Command Phase)</span>
+            <span style="font-size: 0.8rem; font-weight: normal;">Q19 ~ Q27 (9문항)</span>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q19</span>
+              <span class="statement-tag">법적 강제 지휘권 (90%)</span>
+            </div>
+            <div class="statement-body">"대형 재난 확대 시 군청, 경찰, 보건소, 군부대 등 모든 참여 기관은 재난안전법 제52조에 명시된 소방서장(긴급구조통제단장)의 총괄 지휘 통제를 전적으로 수용해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 통합지휘 (Unified Command, pp. 22, 24)</span>
+              <span><strong>법적 근거:</strong> 「재난 및 안전관리 기본법」 제52조(통제단장 현장지휘)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q20</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"선착대장에서 소방서장으로의 지휘권 인계는 구두로 얼버무려서는 안 되며, 현장 상황과 가용 자원을 정확히 기재한 정식 브리핑 절차를 거쳐 전 대원에게 공식 공표되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 지휘권 인계 절차 (Transfer of Command, p. 22)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제11조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q21</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"장기화되는 대형 산불이나 공장 화재에서는 주먹구구식 지시를 배제하고, 다음 작전 시간대 동안의 진화 목표와 부서별 임무가 명시된 '서면 작전계획서'가 반드시 문서로 하달되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 사건행동계획 (pp. 21, 54, 105)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제18조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q22</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"투입된 소방차량 및 대원의 위치와 상태(할당, 사용 중, 대기, 이동 중)가 지휘소 상황판에 실시간으로 업데이트되지 않는 자원 관리는 현장 마비를 초래한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.4 자원 추적 및 보고 (Tracking and Reporting, p. 16)</span>
+              <span><strong>법적 근거:</strong> 소방청 무선자원관리 및 현장영상 전송 규정</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q23</span>
+              <span class="statement-tag">기관간 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"의령군청 상황실(재난안전대책본부)은 소방의 현장 전술에 일일이 간섭하지 말고, 도로 통제, 이재민 구호, 병원 후송 병상 확보 등 후방 행정지원에 전념해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 2.0 긴급대응센터와 현장의 상호작용 (pp. 35, 47)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제16조(지역재난안전대책본부)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q24</span>
+              <span class="statement-tag">응급의료 협업 (60%)</span>
+            </div>
+            <div class="statement-body">"교통사고나 다수사상자 현장에서 의령군 보건소 신속대응반과 병원 재난의료지원팀은 소방 현장지휘소의 환자 중증도 분류와 이송 지시를 무조건 따라야 환자 분산이 성공한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> ICS Tab 4/Tab 10 구급 및 의료단 (pp. 96, 114)</span>
+              <span><strong>법적 근거:</strong> 「119구조·구급에 관한 법률」 제13조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q25</span>
+              <span class="statement-tag">전 기관 협업 (60%)</span>
+            </div>
+            <div class="statement-body">"지휘관 회의나 현장 무전 시 기관별 개별 무전기를 사용하지 않고, 유관기관끼리 단일한 '공통 무전 통화채널' 하나로 지휘 통신을 통일하는 것이 협업의 승패를 가른다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제4장 1.1 통합 통신 (Integrated Communications, pp. 22, 52)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제74조의2(재난안전통신망 사용의무)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q26</span>
+              <span class="statement-tag">고위 정책 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"소방서장, 의령군수, 경찰서장 등 유관기관 기관장들이 현장 조정회의에 직접 참여하여 헬기 투입 우선순위나 주민 대피 명령 등 고위험 전략 결정을 즉시 타결해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 3.0 다기관조정그룹 (MAC Group, pp. 40–41)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제54조(재난수습 지원요청)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q27</span>
+              <span class="statement-tag">기관간 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"재난 현장에서 각 기관(군청, 경찰, 소방)이 개별적으로 언론 브리핑을 하는 것을 금지하고, 현장지휘소 내 '통합 언론창구'를 통해 일원화된 피해 집계만 발표해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 5.1 합동정보센터 (JIC, pp. 43–45)</span>
+              <span><strong>법적 근거:</strong> 소방청 긴급구조대응 브리핑 규정</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4단계 -->
+        <div class="statement-group">
+          <div class="statement-group-title">
+            <span>[4단계] 복구 및 평가·철수 단계 (Recovery & Demob Phase)</span>
+            <span style="font-size: 0.8rem; font-weight: normal;">Q28 ~ Q36 (9문항)</span>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q28</span>
+              <span class="statement-tag">소방 고유 (80%)</span>
+            </div>
+            <div class="statement-body">"재난이 진화 국면에 접어들었을 때 모든 소방력이 임의로 한꺼번에 철수해서는 안 되며, 잔화 감시와 안전 관리를 위한 '단계적 자원 철수 계획'에 따라 순차 철수해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.5 자원 해제 (Demobilizing, p. 16)</span>
+              <span><strong>법적 근거:</strong> 「긴급구조대응활동 및 현장지휘 규칙」 제22조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q29</span>
+              <span class="statement-tag">행정·재정 지원 (70%)</span>
+            </div>
+            <div class="statement-body">"원거리 응원 출동을 온 타 소방서 차량의 유류비, 파손 장비, 파견 대원의 식대 등은 사후 완벽하게 보전·정산(경비 실비 정산)되어야 다음 상호응원출동이 보장된다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.6 보상 및 재비축 (p. 16) 및 ICS Tab 5</span>
+              <span><strong>법적 근거:</strong> 「소방기본법」 제11조 제4항(응원출동 소요경비 부담)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q30</span>
+              <span class="statement-tag">조직 문화 (90%)</span>
+            </div>
+            <div class="statement-body">"작전 종료 후 실시하는 현장 강평(사후 검토)은 대원의 실책을 문책하는 자리가 아니라, 시스템의 결함과 무전 혼선을 솔직하게 드러내는 조직 학습의 장이 되어야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제1장 및 제5장 지속적 개선 (pp. 5, 60)</span>
+              <span><strong>법적 근거:</strong> 소방청 긴급구조활동 평가 및 개선 규정</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q31</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"대형 화재나 다수 참사 수습 직후, 지휘부는 현장 정리보다 투입 대원들의 심리적 충격을 줄이기 위한 전문 심리상담과 동료 간 소통(마음 돌봄)을 즉각 의무적으로 시행해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> ICS Tab 4 의료단 (Medical Unit, p. 96)</span>
+              <span><strong>법적 근거:</strong> 「소방공무원 보건안전 및 복지 기본법」 제10조</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q32</span>
+              <span class="statement-tag">지자체 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"인명 검색과 긴급 화재 진압이 종료되는 즉시, 현장지휘통제 권한은 의령군수(재난안전대책본부)에게 공식 문서로 신속히 인계되고 소방은 본연의 대비 태세로 복귀해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제3장 1.1 지휘권 종결 및 EOC 권한 이양 (pp. 22, 38)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제53조(수습활동에의 협조 등)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q33</span>
+              <span class="statement-tag">다기관 협업 (50:50)</span>
+            </div>
+            <div class="statement-body">"소방 단독 평가에 그치지 않고 경찰, 군청, 한전 등이 다 함께 참여하는 '기관 합동 사후평가 보고서'를 공식 작성하여 개선 대책에 의무 반영해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제8장 CPG 101/201 사후 평가 지침 (pp. 76–77)</span>
+              <span><strong>법적 근거:</strong> 「재난안전법」 제10조의2(특별교부세 및 평가)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q34</span>
+              <span class="statement-tag">소방 고유 (90%)</span>
+            </div>
+            <div class="statement-body">"유해화학물질이나 농약 누출 사고 대응 후, 소방차량과 보호장비에 대한 전문 세척·소독(제독)과 정비가 끝날 때까지 해당 장비의 재출동 배치를 엄격히 제한해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 2.6 자원 재비축 및 정비 (p. 16)</span>
+              <span><strong>법적 근거:</strong> 소방장비관리법 제12조 및 유해물질 대응 SOP</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q35</span>
+              <span class="statement-tag">행정 협업 (60%)</span>
+            </div>
+            <div class="statement-body">"산불 진화에 동원된 의용소방대원이나 민간 중장비 기사의 유류비 및 장비 파손에 대한 신속하고 충분한 보상이 행정적으로 담보되어야 향후 민간 협력이 유지된다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제2장 3.1 상호원조 보상 (p. 17)</span>
+              <span><strong>법적 근거:</strong> 「재난 및 안전관리 기본법」 제65조(치료 및 보상금)</span>
+            </div>
+          </div>
+
+          <div class="statement-card">
+            <div class="statement-header">
+              <span class="statement-id">Q36</span>
+              <span class="statement-tag">스마트 혁신 (60%)</span>
+            </div>
+            <div class="statement-body">"재난 대응 중 기록된 무전 녹음, 드론 영상, 출동 기록 데이터를 향후 지휘관 훈련과 대응 매뉴얼 개선을 위해 공식 디지털 자료로 영구 보관·관리해야 한다."</div>
+            <div class="statement-meta">
+              <span><strong>NIMS 근거:</strong> 제4장 2.3 데이터 수집 및 처리 (pp. 54–56)</span>
+              <span><strong>법적 근거:</strong> 지능정보화 기본법 및 공공데이터 활성화법</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 id="sec-3-4">3.4 의령소방서 P 표본(P-Sample) 층화 표집 계획 (4개 직무군 × 4명 = 총 16명)</h3>
+        <p>전체 정원이 약 100명인 의령소방서의 조직 규모와 Q방법론의 이론적 표집(Theoretical Sampling) 원칙(Brown, 1980; Watts & Stenner, 2012)에 입각하여, 4대 예상 주관성 유형을 대변할 수 있는 핵심 직무군별로 각 4명씩 <strong>총 16명(정원의 16%)</strong>을 엄선하여 조사의 질적 집중도와 성실도를 극대화합니다.</p>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>계급 구성</th>
+                <th>주요 직무</th>
+                <th style="text-align: center;">표본 수</th>
+                <th>선정 기준 및 이론적 의도</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>① 현장 지휘관 군</strong></td>
+                <td>소방령, 소방경</td>
+                <td>서장, 과장, 현장대응단장, 지휘팀장</td>
+                <td style="text-align: center;"><strong>4명</strong></td>
+                <td>NIMS 3장 지휘조정, MAC Group, 통합지휘권 수호 인식 확인</td>
+              </tr>
+              <tr>
+                <td><strong>② 구조·진압 팀장 군</strong></td>
+                <td>소방위, 소방장</td>
+                <td>센터장, 구조대장, 진압팀장</td>
+                <td style="text-align: center;"><strong>4명</strong></td>
+                <td>NIMS 1~3장 모듈 편제, 통제범위, 선착대 지휘권 승계 체감도 파악</td>
+              </tr>
+              <tr>
+                <td><strong>③ 현장 대원 군</strong></td>
+                <td>소방교, 소방사</td>
+                <td>화재진압대원 2, 구조대원 1, 구급대원 1</td>
+                <td style="text-align: center;"><strong>4명</strong></td>
+                <td>NIMS 4장 평이한 언어, PS-LTE 실효성, 위험회피 독립권(Q18) 확인</td>
+              </tr>
+              <tr>
+                <td><strong>④ 행정 및 지원 군</strong></td>
+                <td>소방경~소방교</td>
+                <td>예방, 장비, 통신, 의소대 담당</td>
+                <td style="text-align: center;"><strong>4명</strong></td>
+                <td>NIMS 2장 자원 유형화, 8장 제도적 보상, EOC-ICP 역할분담 확인</td>
+              </tr>
+              <tr style="background: #f8fafc; font-weight: 700;">
+                <td colspan="3">합 계</td>
+                <td style="text-align: center;">16명</td>
+                <td>4대 핵심 직무군별 완벽한 균형(Balanced) 층화 확보</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="sec-3-5">3.5 Q 소팅(Q-Sorting) 절차 및 점수화 분포</h3>
+        <p>응답자는 36개 진술문을 읽고, 9점 척도(-4에서 +4까지)의 정규분포 격자에 카드를 배치합니다.</p>
+        <div class="grid-box">
+       [ 가장 동의하지 않음 ]                     [ 중립 ]                     [ 가장 동의함 ]
+Score:      -4        -3        -2        -1         0        +1        +2        +3        +4
+      ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
+      │  ( 2 )  │  ( 3 )  │  ( 4 )  │  ( 5 )  │  ( 8 )  │  ( 5 )  │  ( 4 )  │  ( 3 )  │  ( 2 )  │
+      └─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
+Total: 2 + 3 + 4 + 5 + 8 + 5 + 4 + 3 + 2 = 36 문항
+        </div>
+      </section>
+
+      <!-- 제4장 분석 및 예상 유형 -->
+      <section id="sec-4">
+        <h2>제4장 자료 분석 및 예상 인식 유형 (Typology)</h2>
+
+        <h3 id="sec-4-1">4.1 도출 예상 4대 주관성 유형 가설</h3>
+        <div class="mermaid">
+graph TD
+    subgraph TYPOLOGY["의령소방서 소방공무원 인식 유형 예측 (4대 유형)"]
+        T1["[제1유형] 절대지휘권 수호형<br/>(Command Authority First)<br/>- 통제단장의 절대적 지휘권(Q19)<br/>- 지휘관 자격인증 및 공식승계(Q01, Q20)<br/>- 유관기관 개입 철저 배제"]
+        T2["[제2유형] 현장대원 안전·실리형<br/>(Safety & Practical Tactics)<br/>- 생명안전 및 위험시 작전중지(Q11, Q18)<br/>- 평이한 언어 및 통신 상호운용(Q07, Q25)<br/>- PTSD 및 대원 케어 최우선(Q31)"]
+        T3["[제3유형] 광역자원·상호원조 최적화형<br/>(Mutual Aid & Resource Optimization)<br/>- 자동출동 상호원조(Q05)<br/>- 자원 유형화 및 집결소 운영(Q04, Q14)<br/>- 사후 완벽한 재정보존(Q29)"]
+        T4["[제4유형] 거버넌스·협업 연계형<br/>(Multiagency Governance & Public Trust)<br/>- EOC-소방 역할분담(Q23)<br/>- 의용소방대/민간자원 결합(Q06, Q35)<br/>- 단일 언론창구 JIC 및 소통(Q08, Q27)"]
+    end
+        </div>
+      </section>
+
+      <!-- 제5장 기대효과 -->
+      <section id="sec-5">
+        <h2>제5장 정책적·학술적 기대효과 및 활용 방안</h2>
+
+        <div class="callout callout-note">
+          <strong>💡 [지도교수 중점 지도사항 완벽 반영]</strong><br>
+          NIMS 교재 체계의 한국적 적용을 통해 얻을 수 있는 <strong>① 학술적·이론적 기여</strong>, <strong>② 국가 정책 및 제도적 기대효과</strong>, <strong>③ 의령소방서 현장 실무 고도화</strong>의 3대 축을 체계적으로 제시합니다.
+        </div>
+
+        <div class="mermaid">
+flowchart TD
+    subgraph IMPACT["NIMS 체계 적용의 3대 다차원적 기대효과"]
+        direction TB
+        E1["1. 학술적·이론적 기대효과<br/>- 교재 기반 Q 연구 완성도 극대화<br/>- 의미구성(Sensemaking) 실증 규명<br/>- 다차원적 네트워크 성과 모델 정립"]
+        E2["2. 국가 정책 및 제도적 기대효과<br/>- 한국형 K-NIMS 긴급구조통제단 고도화<br/>- 지휘관 자격인증제 객관적 표준화<br/>- PS-LTE 평이한 언어 규약 법제화"]
+        E3["3. 현장 실무적 기대효과 (의령소방서)<br/>- 농어촌 관서 광역 자동 상호원조 정착<br/>- 대원 안전 및 PTSD 예방 프로토콜<br/>- 고유:협업(7:3) 성과지표(KPI) 구축"]
+    end
+        </div>
+
+        <h3 id="sec-5-1">5.1 학술적·이론적 기대효과 (Theoretical Contribution)</h3>
+        <ul>
+          <li><strong>주관성 연구의 방법론적 완성도 극대화:</strong> 연구자의 직관이나 임의적 인터뷰에 머무르던 기존 연구 한계를 탈피하고, NIMS 2017(제1장~제8장)의 공인된 원리를 뼈대로 삼아 <strong>Q 모집단의 내용타당도와 학술적 엄밀성을 완벽히 확보</strong>합니다.</li>
+          <li><strong>위기 시 사회적 의미구성(Sensemaking) 실증:</strong> 위기 상황에서 대원과 지휘관이 사건을 인지하고 해석하는 인지적 과정을 밝혀냄으로써 규범적 제도론을 <strong>행위자 중심의 실증 연구로 진화</strong>시킵니다.</li>
+          <li><strong>다차원적 네트워크 성과(Multidimensional Performance) 평가 모델 확립:</strong> 단순 양적 출동 건수를 넘어 지휘 안정성, 자원 효율성, 기관 신뢰도, 대원 회복탄력성을 포괄하는 다차원 평가 틀을 정립합니다.</li>
+        </ul>
+
+        <h3 id="sec-5-2">5.2 국가 정책 및 제도적 기대효과 (Policy Reform)</h3>
+        <ul>
+          <li><strong>한국형 K-NIMS 긴급구조통제단 운영 매뉴얼 고도화:</strong> 「재난안전법」 제52조 긴급구조통제단장 지휘권의 실효적 작동을 위한 표준운영절차(SOP) 내 NIMS 14대 관리특성 강제 조항 신설 근거 제공.</li>
+          <li><strong>현장지휘관 자격인증제(Credentialing) 표준화:</strong> NIMS 제2장 및 제3장에 입각한 객관적 지휘관 역량 검증 기준 수립.</li>
+          <li><strong>재난안전통신망(PS-LTE) 평이한 언어(Plain Language) 통신 규약 법제화:</strong> 소방-경찰-군-지자체 공통 무전 은어 금지 및 표준 교신 훈령 제정.</li>
+        </ul>
+
+        <h3 id="sec-5-3">5.3 현장 실무적 기대효과: 경남 의령소방서 맞춤형 혁신 (Practical Optimization)</h3>
+        <ul>
+          <li><strong>농어촌 관서의 자원 한계 극복:</strong> 함안·합천·진주 등 인접 서와의 <strong>자동출동(Automatic Mutual Aid) 및 자원집결소(Staging Area) 프로토콜</strong> 정착.</li>
+          <li><strong>대원 안전(Responder Safety) 최우선 문화 정착:</strong> 안전장교의 독립적 작전중지권(Q18)과 사후 PTSD 상담 의무화(Q31).</li>
+          <li><strong>현장 밀착형 협업 성과지표(KPI) 개발:</strong> 의령소방서 대원들의 주관적 합의에 기반한 <strong>'소방 고유 지표(70%) : 다기관 협업 지표(30%)'</strong> 최적 가중치 모델 도출.</li>
+        </ul>
+      </section>
+
+      <!-- 제6장 추진일정 -->
+      <section id="sec-6">
+        <h2>제6장 연구 추진 일정 및 연구 윤리</h2>
+
+        <div class="callout callout-note">
+          <strong>📅 [「현장지휘론」 기말과제 11월 4주 완성 집중 로드맵]</strong><br>
+          연구자가 의령소방서 재직 실무자라는 압도적인 현장 네트워크를 활용하여, <strong>11월 한 달(4주) 이내에 도구 제작부터 16명 소팅, PQMethod 통계분석, 최종 보고서 작성까지 완결</strong>하도록 설계되었습니다.
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 32%;">구분 / 주차</th>
+                <th style="text-align: center; width: 12%;">[1주차]<br>11월 1주</th>
+                <th style="text-align: center; width: 12%;">[2주차]<br>11월 2주</th>
+                <th style="text-align: center; width: 12%;">[3주차]<br>11월 3주</th>
+                <th style="text-align: center; width: 12%;">[4주차]<br>11월 4주</th>
+                <th style="width: 20%;">주요 산출물 및 마일스톤</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>① Q 표본 도구화 및 대상자 섭외</strong></td>
+                <td style="text-align: center; color: var(--accent); font-weight: bold;">■■■■■</td>
+                <td></td><td></td><td></td>
+                <td>36개 카드 및 응답지 인쇄, 16명 사전 일정 조율</td>
+              </tr>
+              <tr>
+                <td><strong>② P 표본(16명) 1:1 대면 소팅 실시</strong></td>
+                <td></td>
+                <td style="text-align: center; color: var(--accent); font-weight: bold;">■■■■■</td>
+                <td></td><td></td>
+                <td>1인당 15분 대면 소팅 및 사후 구술 인터뷰</td>
+              </tr>
+              <tr>
+                <td><strong>③ 데이터 코딩 및 PQMethod 통계분석</strong></td>
+                <td></td><td></td>
+                <td style="text-align: center; color: var(--accent); font-weight: bold;">■■■■■</td>
+                <td></td>
+                <td>PCA 주성분분석 & Varimax 요인회전 완료</td>
+              </tr>
+              <tr>
+                <td><strong>④ 유형 해석 및 기말 최종 보고서 완성</strong></td>
+                <td></td><td></td><td></td>
+                <td style="text-align: center; color: var(--accent); font-weight: bold;">■■■■■</td>
+                <td>유형별 의미구성 해석 및 현장지휘론 보고서 LMS 제출</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>연구 윤리 준수 및 내부자 편향 방지</h3>
+        <p>연구자가 동료 소방관이라는 점에서 발생할 수 있는 '상명하복식 응답'이나 '인사상 눈치보기(내부자 편향)'를 원천 차단하기 위해, 개인식별정보를 일체 배제한 <strong>'무기명 비밀 봉투 수거'</strong> 방식을 적용하여 학술적 객관성을 철저히 보장합니다.</p>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>
