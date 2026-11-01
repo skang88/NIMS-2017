@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIMS 현장지휘 관리원칙 Q-방법론 실증 분석 리포트</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --primary-dark: #172554;
+      --accent-red: #b91c1c;
+      --accent-blue: #2563eb;
+      --accent-green: #15803d;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      color: var(--gray-800);
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 50px 60px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Header */
+    .report-header {
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 25px;
+      margin-bottom: 35px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-primary { background: #dbeafe; color: var(--primary); }
+    .badge-secondary { background: var(--gray-100); color: var(--gray-700); }
+    .badge-success { background: #dcfce7; color: var(--accent-green); }
+
+    h1 {
+      font-size: 1.85rem;
+      color: var(--gray-900);
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+      padding: 18px 22px;
+      background: var(--gray-50);
+      border-radius: 10px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .meta-item {
+      font-size: 0.88rem;
+    }
+
+    .meta-item strong {
+      display: block;
+      color: var(--gray-600);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Section Headings */
+    h2 {
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+      margin-top: 45px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      color: var(--gray-800);
+      margin-top: 25px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    p {
+      margin-bottom: 14px;
+      font-size: 0.96rem;
+      color: #334155;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 20px 0 30px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--gray-700);
+      padding: 12px 16px;
+      font-weight: 700;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .num-col {
+      text-align: right;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* Card Box */
+    .type-box {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .type-box.bipolar {
+      border-left: 6px solid #e11d48;
+    }
+
+    .type-box.network {
+      border-left: 6px solid #2563eb;
+    }
+
+    .type-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .type-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--gray-900);
+    }
+
+    .var-badge {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    /* Quote Box */
+    .interview-quote {
+      background: #f8fafc;
+      border-left: 4px solid var(--gray-300);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.92rem;
+      color: #1e293b;
+    }
+
+    .interview-quote strong {
+      color: var(--primary);
+    }
+
+    .quote-source {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+
+    /* Key Finding Highlight */
+    .highlight-card {
+      background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 22px;
+      margin: 25px 0;
+    }
+
+    .highlight-card h4 {
+      color: var(--primary);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-pos {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    .tag-neg {
+      color: var(--accent-red);
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Report Header -->
+  <header class="report-header">
+    <div class="badge-bar">
+      <span class="badge badge-primary">학술 연구 실증 분석</span>
+      <span class="badge badge-secondary">현장지휘론 대학원 연구</span>
+      <span class="badge badge-success">R qmethod v1.8.4 실증 검증 완료</span>
+    </div>
+    <h1>NIMS 핵심 현장지휘 관리원칙 작동기제에 대한<br/>전문가 집단 주관성 인식 유형 분석</h1>
+    <p class="subtitle">방재·소방·행정·인프라 4대 전문가 층화표본(N=5) Q-소팅 R 분석 실증 보고서</p>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>연구 책임자</strong>
+        강석균 (학번: 2678125)
+      </div>
+      <div class="meta-item">
+        <strong>분석 대상 표본 (P-Sample)</strong>
+        N = 5 (소방 1, 행정 1, 인프라 1, 연구 2)
+      </div>
+      <div class="meta-item">
+        <strong>Q-표본 (Q-Sample)</strong>
+        N = 36개 진술문 (-4 ~ +4 9점 강제분포)
+      </div>
+      <div class="meta-item">
+        <strong>통계 분석 엔진</strong>
+        R Language (PCA, Varimax, qmethod)
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. 연구 개요 -->
+  <section>
+    <h2><i class="fa-solid fa-microscope"></i> 1. 연구 배경 및 P-표본 구성</h2>
+    <p>
+      본 분석은 미국 국가재난관리체계(NIMS 2017)의 14대 핵심 현장지휘 관리원칙이 재난 현장에서 작동하는 구체적인 <strong>작동기제(Operational Mechanism)</strong>에 대해, 서로 다른 직무적 배경을 지닌 방재 전문가들이 형성하고 있는 주관적 신념체계와 <strong>의미구성(Sensemaking)</strong>의 차이를 규명하는 것을 목적으로 합니다.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>응답자 코드</th>
+            <th>성명 / ID</th>
+            <th>소속 직무군 (Strata)</th>
+            <th>재난안전 실무 경력</th>
+            <th>1차 3분류 경향 (동의/비동의)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>P-01</strong></td>
+            <td>백승창</td>
+            <td>Group A (소방 실무군)</td>
+            <td>20년 이상 (베테랑 지휘관)</td>
+            <td>현장 단일지휘 집중, 문서주의 극단 기피</td>
+          </tr>
+          <tr>
+            <td><strong>P-02</strong></td>
+            <td>P10</td>
+            <td>Group B (방재 행정군)</td>
+            <td>20년 이상 (지자체 관리관)</td>
+            <td>유연한 모듈화 및 자원 동원 통일성 중시</td>
+          </tr>
+          <tr>
+            <td><strong>P-03</strong></td>
+            <td>신경희</td>
+            <td>Group C (안전 인프라군)</td>
+            <td>3년 미만 (유관기관 협업)</td>
+            <td>단일 지휘체계 통합 지지, 문서 작성 한계 지적</td>
+          </tr>
+          <tr>
+            <td><strong>P-04</strong></td>
+            <td>김승환</td>
+            <td>Group D (학술 연구군)</td>
+            <td>7년 ~ 12년 (위기관리 연구원)</td>
+            <td>골든타임 기제 및 표준 상황보고 양식 지휘 강조</td>
+          </tr>
+          <tr>
+            <td><strong>P-05</strong></td>
+            <td>P004</td>
+            <td>Group D (학술 연구군)</td>
+            <td>3년 미만 (방재학 전공)</td>
+            <td>공통 용어 및 전면적 표준화 프로토콜 중심</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. R 요인분석 및 주성분 결과 -->
+  <section>
+    <h2><i class="fa-solid fa-chart-pie"></i> 2. R 주성분 분석(PCA) 및 요인 추출 결과</h2>
+    <p>
+      R 환경에서 피어슨 상관계수를 기반으로 주성분 분석(PCA)을 수행한 결과, 고유값(Eigenvalue > 1.0) 기준에 부합하는 <strong>2개의 핵심 요인</strong>이 도출되었습니다. 2개 요인의 누적 설명변량은 <strong>54.9%</strong>로 높은 설명력을 보였습니다.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th class="num-col">고유값 (Eigenvalue)</th>
+            <th class="num-col">설명 변량 (%)</th>
+            <th class="num-col">누적 설명변량 (%)</th>
+            <th>유형 특성 요약</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>제1요인 (Factor 1)</strong></td>
+            <td class="num-col">1.512</td>
+            <td class="num-col">27.6%</td>
+            <td class="num-col">27.6%</td>
+            <td><strong>양극성 요인:</strong> 절차적 표준화(연구) vs. 현장 유연성(소방) 대립</td>
+          </tr>
+          <tr>
+            <td><strong>제2요인 (Factor 2)</strong></td>
+            <td class="num-col">1.234</td>
+            <td class="num-col">27.4%</td>
+            <td class="num-col"><strong>54.9%</strong></td>
+            <td><strong>네트워크 협력형:</strong> 유연한 자원공조 및 상황인식 통합 추구</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>회전된 요인 부하량 (Varimax Factor Loadings)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>응답자</th>
+            <th>소속 집단</th>
+            <th class="num-col">제1요인 부하량 (F1)</th>
+            <th class="num-col">제2요인 부하량 (F2)</th>
+            <th>플래깅 (Flagging) 및 최종 배속</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>백승창</strong></td>
+            <td>소방 실무군 (Group A)</td>
+            <td class="num-col" style="color: #b91c1c; font-weight:800;">-0.829 ***</td>
+            <td class="num-col">0.299</td>
+            <td><strong>제1유형의 역상 (현장 직관·단일지휘형)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>P004</strong></td>
+            <td>학술 연구군 (Group D)</td>
+            <td class="num-col" style="color: #2563eb; font-weight:800;">+0.735 ***</td>
+            <td class="num-col">0.273</td>
+            <td><strong>제1유형 (절차적 표준화 지향형)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>P10</strong></td>
+            <td>방재 행정군 (Group B)</td>
+            <td class="num-col">0.007</td>
+            <td class="num-col" style="color: #2563eb; font-weight:800;">+0.824 ***</td>
+            <td><strong>제2유형 (자원공조·모듈조직형)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>김승환</strong></td>
+            <td>학술 연구군 (Group D)</td>
+            <td class="num-col">0.156</td>
+            <td class="num-col" style="color: #2563eb; font-weight:800;">+0.696 **</td>
+            <td><strong>제2유형 (자원공조·상황인식형)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>신경희</strong></td>
+            <td>안전 인프라군 (Group C)</td>
+            <td class="num-col">0.353</td>
+            <td class="num-col">0.202</td>
+            <td>복합 인식군 (F1에 완만한 정적 경향)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.85rem; color:var(--gray-600);">* 유의수준: *** p &lt; 0.01 (표준오차 기준 임계치 ±0.43 초과)</p>
+  </section>
+
+  <!-- 3. 주관성 유형 프로파일링 -->
+  <section>
+    <h2><i class="fa-solid fa-users-viewfinder"></i> 3. 주관성 유형(Typology)별 심층 프로파일링</h2>
+
+    <!-- 제1유형 -->
+    <div class="type-box bipolar">
+      <div class="type-title-row">
+        <div class="type-title">
+          <i class="fa-solid fa-arrows-split-up-and-left" style="color:#e11d48;"></i> 
+          제1유형: 「절차적 표준화 지향 대(對) 현장 생존 직관주의」 (양극성 요인)
+        </div>
+        <span class="var-badge">설명변량: 27.6%</span>
+      </div>
+
+      <p>
+        제1요인은 정반대의 주관성이 하나의 축에서 부딪히는 <strong>양극성 요인(Bipolar Factor)</strong>으로 나타났습니다.
+        이론 연구군(P004, 부하량 +0.735)과 20년 현장 소방 지휘관(백승창, 부하량 -0.829)이 완벽한 대척점에 서 있습니다.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>진술문 번호 및 핵심 내용</th>
+              <th>연결된 2장 작동기제</th>
+              <th class="num-col">Z-Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag-pos">최선호 (+)</span></td>
+              <td><strong>Q02</strong> 공통 용어 및 표준 프로토콜 일관 사용 의무화</td>
+              <td>기관 간 정보 오독 및 혼선 방지 기제</td>
+              <td class="num-col tag-pos">+2.44</td>
+            </tr>
+            <tr>
+              <td><span class="tag-pos">최선호 (+)</span></td>
+              <td><strong>Q04</strong> 사건행동계획(IAP) 수립 및 상황 공유</td>
+              <td>작전 목표 정렬 및 자원 배분 기제</td>
+              <td class="num-col tag-pos">+1.44</td>
+            </tr>
+            <tr>
+              <td><span class="tag-neg">최기피 (-)</span></td>
+              <td><strong>Q32</strong> 사후 종합평가(AAR) 및 개선과제 관리</td>
+              <td>지속적 피드백 및 환류 기제</td>
+              <td class="num-col tag-neg">-1.67</td>
+            </tr>
+            <tr>
+              <td><span class="tag-neg">최기피 (-)</span></td>
+              <td><strong>Q11</strong> 지휘권 이양 시 브리핑 및 문서화 의무</td>
+              <td>지휘 단절 및 권한 공백 방지 기제</td>
+              <td class="num-col tag-neg">-1.50</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interview-quote">
+        <strong>🚒 백승창 지휘관 (소방실무 20년, F1 음의 부하 -0.829) 실제 진술:</strong><br/>
+        <em>"+4 선호 이유 (Q01, Q11): 지휘체계의 단일성이 현장에서 가장 중요하다.<br/>
+        -4 기피 이유 (Q02, Q04): <strong>일관성과 의무화는 현장에서 극히 위험하다.</strong>"</em>
+        <span class="quote-source">→ 정량적 표준화와 계획 문서 작성이 급박한 현장에서는 오히려 대응 기동성을 해치고 소방대원을 위험에 빠뜨린다는 현장 실무자의 강력한 반작용을 입증.</span>
+      </div>
+    </div>
+
+    <!-- 제2유형 -->
+    <div class="type-box network">
+      <div class="type-title-row">
+        <div class="type-title">
+          <i class="fa-solid fa-network-wired" style="color:#2563eb;"></i> 
+          제2유형: 「유연한 자원공조 및 네트워크 통합 상황인식형」
+        </div>
+        <span class="var-badge">설명변량: 27.4%</span>
+      </div>
+
+      <p>
+        지자체 방재 행정 관리자(P10, 부하량 +0.824)와 중견 방재 연구자(김승환, 부하량 +0.696)가 결합된 유형입니다.
+        이들은 고정된 시설이나 형식적 통제 범위를 배제하고, <strong>자원의 명세화된 식별</strong>과 <strong>모듈형 조직 확장</strong>, <strong>단일 상황인식(COP)</strong>을 지휘의 성패로 지각합니다.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>진술문 번호 및 핵심 내용</th>
+              <th>연결된 2장 작동기제</th>
+              <th class="num-col">Z-Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag-pos">최선호 (+)</span></td>
+              <td><strong>Q08</strong> 자원의 카테고리화 및 명세화된 사전 식별</td>
+              <td>요구-공급 적시 매칭 및 자원 적체 방지 기제</td>
+              <td class="num-col tag-pos">+2.09</td>
+            </tr>
+            <tr>
+              <td><span class="tag-pos">최선호 (+)</span></td>
+              <td><strong>Q03</strong> 재난 규모에 따른 모듈형(Modular) 지휘조직 확장</td>
+              <td>가변적 확장성 및 조직 과부하 완화 기제</td>
+              <td class="num-col tag-pos">+1.71</td>
+            </tr>
+            <tr>
+              <td><span class="tag-pos">최선호 (+)</span></td>
+              <td><strong>Q07</strong> 단일 상황인식 체계 하의 통합 정보 공유</td>
+              <td>정보 비대칭 해소 및 의사결정 동기화 기제</td>
+              <td class="num-col tag-pos">+1.71</td>
+            </tr>
+            <tr>
+              <td><span class="tag-neg">최기피 (-)</span></td>
+              <td><strong>Q05</strong> 통제범위(Span of Control, 3~7인) 원칙의 기계적 준수</td>
+              <td>지휘통제 과부하 통제 기제</td>
+              <td class="num-col tag-neg">-2.29</td>
+            </tr>
+            <tr>
+              <td><span class="tag-neg">최기피 (-)</span></td>
+              <td><strong>Q06</strong> 사전 지정된 현장지휘소(ICP) 및 집결지 운영</td>
+              <td>지휘 거점 확립 및 접근성 확보 기제</td>
+              <td class="num-col tag-neg">-1.91</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interview-quote">
+        <strong>🏛️ P10 관리관 (지자체 행정 20년, F2 정의 부하 +0.824) 실제 진술:</strong><br/>
+        <em>"+4 선호 이유 (Q08, Q18): <strong>유연성과 통일성이 함께 필요하다.</strong><br/>
+        -4 기피 이유 (Q04, Q05): 재난 초기현장에서는 정확성과 동시에 즉시성이 필요하다. 확인된 사실만을 토대로 신속한 1보 상황 전파가 더 중요하다."</em>
+      </div>
+
+      <div class="interview-quote">
+        <strong>🎓 김승환 연구원 (방재연구 10년, F2 정의 부하 +0.696) 실제 진술:</strong><br/>
+        <em>"+4 선호 이유 (Q01, Q04): <strong>골든타임을 확보해야 초기 대응의 성패가 좌우된다.</strong> 구두보고보다 실시간 정확한 표준 상황보고 양식 기반 지휘가 신뢰성을 담보한다.<br/>
+        -4 기피 이유 (Q05, Q06): 통제단장의 역량에 맞춰 결재선을 단순화하고 현장 지휘관에게 직통 보고가 이루어져야 한다."</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 핵심 학술적 발견 -->
+  <section>
+    <h2><i class="fa-solid fa-lightbulb"></i> 4. 핵심 실증 발견 및 정책적 시사점</h2>
+
+    <div class="highlight-card">
+      <h4><i class="fa-solid fa-triangle-exclamation"></i> 발견 1: 현장 소방 지휘관 vs 행정·연구 집단 간의 '문서화(IAP) 인지적 단절'</h4>
+      <p>
+        학술 연구자와 행정 공무원은 사건행동계획(IAP, Q04)과 공통 프로토콜(Q02)이 다기관 협업의 절대적 전제라고 인식하는 반면, 현장 베테랑 소방관은 초를 다투는 현장에서의 문서화 요구가 오히려 '현장을 위험하게 만드는 족쇄'로 작동한다고 보았습니다.
+        이러한 <strong>의미구성의 충돌</strong>은 실제 재난 발생 시 긴급구조통제단(소방)과 통합지원본부(지자체) 간의 합동작전 지연을 초래하는 근본적 주관성 원인입니다.
+      </p>
+    </div>
+
+    <div class="highlight-card">
+      <h4><i class="fa-solid fa-link-slash"></i> 발견 2: 교과서적 '통제범위(3~7인 룰)'에 대한 전면적 회의론</h4>
+      <p>
+        미국 NIMS의 가장 대표적인 원칙 중 하나인 '통제범위(Span of Control, Q05)'에 대해 제2유형(행정 및 연구)의 모든 응답자가 가장 강한 비동의(-2.29)를 표출했습니다.
+        한국의 재난 현장에서는 중간 계통을 거치는 3~7인 룰보다, 상황의 급박성에 맞춘 <strong>'지휘관 직통 보고 및 단순화된 결재 체계'</strong>가 생명 보호에 훨씬 유효하다고 지각하고 있습니다.
+      </p>
+    </div>
+
+    <div class="highlight-card">
+      <h4><i class="fa-solid fa-bullseye"></i> 정책적 제언: '유연성(소방)'과 '통일성(행정)'을 통합하는 현장 표준화 혁신</h4>
+      <p>
+        한국형 현장지휘체계 개선을 위해서는 소방의 '단일 권한 결단력'과 행정의 '가용 자원 명세화(Q08)'가 유기적으로 연계되어야 합니다.
+        복잡한 서식 대신 모바일 및 무선 데이터 기반의 <strong>'1페이지 표준 모바일 상황보고'</strong> 양식을 구축함으로써, 소방관의 행동 유연성을 보장하면서도 지자체의 자원공조 네트워크를 동기화하는 제도적 개선이 시급합니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>NIMS 현장지휘론 주관성 연구 분석 보고서 | 연구책임자: 강석균 (2678125)</p>
+    <p>Generated with R Language (qmethod, psych) & HTML5 Research Framework | 2026-10-31</p>
+  </footer>
+</div>
+
+</body>
+</html>

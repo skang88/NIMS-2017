@@ -15,8 +15,16 @@ NIMS-2017/
 │   ├── Chapter 1~8 및 Appendix 원문 (md)
 │   └── 🖼️ 관련 도표 및 구조도 이미지 (image*.png)
 │
+├── 📁 Q방법론 발표준비/       # 학술 발표 및 세미나 준비 자료
+│   ├── 🖥️ Q_Methodology_Presentation.html  # [핵심] 웹 브라우저 전체화면 발표용 슬라이드 덱 (대본 탑재)
+│   ├── 📝 Q방법론 발표준비.md              # 7개 슬라이드 전체 대본 및 이론 정리 마스터 문서
+│   └── 📑 (2026.09.12/19) Q방법론.pdf      # 동료 세미나 참고 슬라이드 원본 (이론편/실습편)
+│
 ├── 📁 labs/                  # Q-방법론 실습, 웹 애플리케이션 및 연구 제안서
+│   ├── 📊 NIMS_Q_Methodology_Analysis_Report.html # [최종] 5인 실증 데이터 R 분석 리포트 (HTML)
+│   ├── 📈 run_nims_q_analysis.R            # [핵심] JSON 자동 취합 및 Q-방법론 R 통계 분석 스크립트
 │   ├── 🚀 NIMS_Q_Sorting_App_강석균.html   # [핵심] Q-소팅 웹 애플리케이션 & 16인 집계기
+│   ├── 💡 Q_Methodology_Universal_Analysis_Prompt.md  # [범용] R 분석 & 학술논문 작성 마스터 프롬프트
 │   ├── 📝 NIMS_Disaster_Management_Q_Proposal.md / .html  # Q-연구 제안서 & 진술문 36선 (작동기제 매핑)
 │   ├── 📋 GoogleForm_Script.gs             # 구글 설문지 자동생성 Apps Script
 │   ├── 📄 GoogleForm_Survey_Questions.md   # 구글폼 설문지 전문

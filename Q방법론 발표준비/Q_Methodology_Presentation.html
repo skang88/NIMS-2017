@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q-방법론(Q-Methodology)의 이론과 실제 | 프레젠테이션</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --accent: #2563eb;
+      --accent-coral: #f43f5e;
+      --accent-green: #10b981;
+      --dark: #0f172a;
+      --gray-100: #f8fafc;
+      --gray-200: #f1f5f9;
+      --gray-300: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --slide-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
+      background: #090d16;
+      color: var(--gray-800);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+
+    /* Presentation Frame (16:9 Aspect Ratio) */
+    .deck-container {
+      width: 100vw;
+      height: 100vh;
+      max-width: 1600px;
+      max-height: 900px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--slide-bg);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* Top Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 5px;
+      background: rgba(0, 0, 0, 0.08);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-coral));
+      width: 0%;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Slide Area */
+    .slide-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 50px 70px 40px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+      background: var(--slide-bg);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 15px;
+    }
+
+    .slide-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: #eff6ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.25;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    /* Slide Body Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    th {
+      background: var(--gray-800);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    tr:nth-child(even) td {
+      background: var(--gray-100);
+    }
+
+    /* Timeline Stepper */
+    .timeline-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .timeline-box {
+      background: white;
+      border-top: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 1px solid var(--gray-200);
+      border-right: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .timeline-year {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .timeline-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .timeline-desc {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* Quote Box */
+    .quote-banner {
+      background: linear-gradient(135deg, #1e3a8a, #172554);
+      color: white;
+      padding: 22px 30px;
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25);
+    }
+
+    .quote-banner i {
+      font-size: 2.2rem;
+      color: #93c5fd;
+      opacity: 0.8;
+    }
+
+    /* Pyramid Visualization */
+    .pyramid-vis {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 0;
+    }
+
+    .pyr-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+      width: 72px;
+    }
+
+    .pyr-cell {
+      width: 100%;
+      height: 28px;
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .pyr-cell.active-pos {
+      background: #bbf7d0;
+      border-color: #86efac;
+    }
+
+    .pyr-cell.active-neg {
+      background: #fecdd3;
+      border-color: #fda4af;
+    }
+
+    .pyr-header {
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .pyr-header.pos { color: #166534; background: #dcfce7; }
+    .pyr-header.zero { color: #334155; background: #f1f5f9; }
+    .pyr-header.neg { color: #991b1b; background: #fee2e2; }
+
+    /* Reduction Pipeline Flow (Slide 4) */
+    .reduction-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .step-card {
+      flex: 1;
+      background: white;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+    }
+
+    .step-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    }
+
+    .step-card-highlight {
+      border: 2px solid var(--primary-light);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+    }
+
+    .step-card-header {
+      background: #1e3a8a;
+      color: white;
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-align: center;
+      padding: 7px 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .step-header-highlight {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    }
+
+    .step-card-body {
+      padding: 12px 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-icon {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .step-count {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #1e40af;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+    }
+
+    .step-quote {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 7px 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.35;
+      text-align: center;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
+    .step-bullets {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      font-size: 0.77rem;
+      color: var(--gray-700);
+      line-height: 1.45;
+    }
+
+    .step-bullets li {
+      position: relative;
+      padding-left: 11px;
+      margin-bottom: 4px;
+    }
+
+    .step-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #93c5fd;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Reduction Bottom Grid */
+    .reduction-bottom-grid {
+      display: grid;
+      grid-template-columns: 28% 42% 30%;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .bottom-card {
+      background: white;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .bottom-card-accent {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+    }
+
+    .bottom-card-header {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--gray-800);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .cat-pill {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cat-tag {
+      font-size: 0.68rem;
+      color: var(--gray-400);
+      letter-spacing: 0.05em;
+      text-align: center;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .criteria-badges {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 4px;
+    }
+
+    .criteria-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      width: 19%;
+    }
+
+    .criteria-icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .crit-num {
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -8px;
+    }
+
+    .criteria-item span:last-child {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--gray-700);
+      line-height: 1.25;
+    }
+
+    .reduction-quote {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--gray-800);
+      background: white;
+      border: 1px dashed var(--gray-300);
+      border-radius: 6px;
+      padding: 8px 10px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Bottom Controller */
+    .deck-footer {
+      height: 60px;
+      background: var(--gray-100);
+      border-top: 1px solid var(--gray-300);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 35px;
+      z-index: 10;
+    }
+
+    .slide-counter {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gray-600);
+      font-family: ui-monospace, monospace;
+    }
+
+    .deck-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-ctrl {
+      background: white;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-ctrl:hover {
+      background: var(--gray-200);
+      color: var(--gray-900);
+    }
+
+    .btn-ctrl.btn-speaker {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: var(--accent);
+    }
+
+    .btn-ctrl.btn-speaker.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Speaker Notes Modal / Drawer */
+    .speaker-notes-drawer {
+      position: absolute;
+      bottom: 60px;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      background: rgba(15, 23, 42, 0.97);
+      color: #f8fafc;
+      padding: 22px 35px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      overflow-y: auto;
+    }
+
+    .speaker-notes-drawer.open {
+      transform: translateY(0);
+    }
+
+    .notes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 6px;
+    }
+
+    .notes-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notes-content {
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      font-weight: 400;
+    }
+
+    /* Title Slide (Slide 0) Custom */
+    .title-slide {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px;
+    }
+
+    .title-slide h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .title-slide p.lead {
+      font-size: 1.35rem;
+      color: #93c5fd;
+      margin-bottom: 40px;
+      max-width: 900px;
+      font-weight: 500;
+    }
+
+    .title-meta {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 14px 28px;
+      border-radius: 40px;
+      font-size: 1.05rem;
+      display: inline-flex;
+      gap: 20px;
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="deck-container">
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Slides Viewport -->
+  <div class="slide-viewport">
+
+    <!-- SLIDE 0: TITLE -->
+    <div class="slide active title-slide" data-slide="0">
+      <div style="margin-bottom: 20px;">
+        <span style="background: rgba(59, 130, 246, 0.3); color:#93c5fd; padding:6px 16px; border-radius:30px; font-weight:700; font-size:0.95rem;">
+          <i class="fa-solid fa-graduation-cap"></i> 주관성 연구 방법론 세미나
+        </span>
+      </div>
+      <h1>Q-방법론의 이론과 실제</h1>
+      <p class="lead">사람의 관점과 의미구성(Sensemaking)을 과학화하는 독자적 방법론:<br/>철학적 기원, 진술문 구축, 그리고 현대적 AI 분석 실습</p>
+      
+      <div class="title-meta">
+        <span><strong>발표자:</strong> 강석균</span>
+        <span>|</span>
+        <span><strong>과목:</strong> 현장지휘론 대학원 세미나</span>
+        <span>|</span>
+        <span><strong>일자:</strong> 2026. 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 1: ORIGIN & PHILOSOPHY -->
+    <div class="slide" data-slide="1">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 1. Q의 본질</span>
+          <h2 class="slide-title">Q는 어디에서 왔는가?</h2>
+          <p class="slide-subtitle">사람의 관점을 과학적으로 연구하려는 문제의식의 출발</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="timeline-container">
+          <div class="timeline-box">
+            <div class="timeline-year">1935 | 기원의 탄생</div>
+            <div class="timeline-name">William Stephenson</div>
+            <div class="timeline-desc">물리학자이자 심리학자. "검사(Test)가 아니라 <strong>사람(Person)을 상관</strong>시키자"고 제안하며 통계학의 코페르니쿠스적 전환 시작.</div>
+          </div>
+          <div class="timeline-box">
+            <div class="timeline-year">1936 | 통계 기법</div>
+            <div class="timeline-name">Inverted Factor</div>
+            <div class="timeline-desc">데이터 행렬을 뒤집어(Inversion) 개인의 취향, 신념, 주관적 판단을 <strong>유형(Type)</strong>으로 분석하는 역요인 분석 기법 발표.</div>
+          </div>
+          <div class="timeline-box">
+            <div class="timeline-year">1953 | 독자 체계화</div>
+            <div class="timeline-name">Q Methodology</div>
+            <div class="timeline-desc">단순 기법을 넘어 <strong>『The Study of Behavior』</strong> 출간. 인간의 주관적 행동을 연구하는 독자적 학술 패러다임으로 공인.</div>
+          </div>
+          <div class="timeline-box">
+            <div class="timeline-year">1980 이후 | 현대 Q</div>
+            <div class="timeline-name">Steven Brown</div>
+            <div class="timeline-desc">단순한 'R의 전치'가 아니라 참여자의 <strong>'조작적 주관성(Operant Subjectivity)'</strong>을 탐색하는 정책·사회과학 통합 연구로 도약.</div>
+          </div>
+        </div>
+
+        <div class="quote-banner">
+          <i class="fa-solid fa-quote-left"></i>
+          <div>
+            "Q방법론의 출발은 단순히 '행렬을 뒤집는 통계 테크닉'이 아니라,<br/>
+            <strong>사람의 내면적 관점을 과학적으로 연구할 수 있는가</strong>라는 근본적인 철학적 질문이었다."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: R vs Q COMPARISON -->
+    <div class="slide" data-slide="2">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 1. Q의 본질</span>
+          <h2 class="slide-title">R-방법론 vs Q-방법론의 비교</h2>
+          <p class="slide-subtitle">질문의 차이: 얼마나 많은가(How Many) vs 어떤 관점인가(What Kinds)</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">비교 항목</th>
+              <th style="width: 41%;">전통적 계량 연구 (R-방법론)</th>
+              <th style="width: 41%;">주관성 연구 (Q-방법론)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>철학적 패러다임</strong></td>
+              <td>논리실증주의, 객관주의 (외부자 시각 관찰)</td>
+              <td><strong>구성주의, 현상학 (행위자 내면의 의미구성)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>표본의 대상 (Sample)</strong></td>
+              <td><strong>사람이 표본</strong> (대규모 N명, 확률표집)</td>
+              <td><strong>생각(진술문)이 표본</strong> (소규모 N=30~50, 이론적 층화)</td>
+            </tr>
+            <tr>
+              <td><strong>데이터 행렬 구조</strong></td>
+              <td><strong>N × V 행렬</strong> (행: 사람, 열: 문항 변수)</td>
+              <td><strong>V × P 행렬</strong> (행: 진술문, 열: 사람)</td>
+            </tr>
+            <tr>
+              <td><strong>상관관계의 대상</strong></td>
+              <td>문항 변수와 변수 간 상관 ($r_{xy}$)</td>
+              <td><strong>사람과 사람 간의 상관 ($r_{person}$)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>연구의 궁극 목적</strong></td>
+              <td>가설 검정 및 모집단 통계적 일반화</td>
+              <td><strong>주관성 유형화 및 내면적 신념 가설 생성</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--gray-600);">
+            <div class="card-title"><i class="fa-solid fa-chart-column"></i> R의 질문</div>
+            <p>"이 여행지는 몇 점짜리인가? 만족도는 몇 퍼센트의 사람에게 영향을 주는가?"</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent);">
+            <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-users-viewfinder"></i> Q의 질문</div>
+            <p>"사람들은 여행지의 매력을 <strong>어떤 서로 다른 관점 구조</strong>로 이해하고 평가하는가?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: CONCOURSE & Q-SAMPLE -->
+    <div class="slide" data-slide="3">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 2. 연구 설계</span>
+          <h2 class="slide-title">Q 진술문(Q-Sample)은 어떻게 만드는가?</h2>
+          <p class="slide-subtitle">콘코스(Concourse) 수집부터 층화 매트릭스를 통한 구조적 축약까지</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-comments"></i> 1단계: 콘코스 수집</div>
+            <p><strong>세상의 모든 담론 집대성:</strong> 문헌, 언론 보도, 심층 인터뷰에서 연구 주제에 관한 수백 개의 생생한 일상 언어 수집.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-table-cells"></i> 2단계: 층화 매트릭스</div>
+            <p><strong>이론적 범주화:</strong> 중복·모호 문장을 정제하고, 긍정/부정, 제도/인간 등 다차원 교차 틀로 균형 있게 구조화.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-bullseye"></i> 3단계: Q-표본 확정</div>
+            <p><strong>30~50선 압축:</strong> 파일럿 테스트를 거쳐 응답자가 명확히 자기참조적으로 판단할 수 있는 최종 대표 진술문 확정.</p>
+          </div>
+        </div>
+
+        <div class="card" style="background:#f8fafc; border:2px dashed var(--gray-300);">
+          <div class="card-title" style="font-size:1.05rem;"><i class="fa-solid fa-award" style="color:#f59e0b;"></i> 좋은 Q-진술문이 갖추어야 할 7대 황금률</div>
+          <div class="grid-4" style="margin-top:5px; font-size:0.88rem;">
+            <div><strong>① 단일성:</strong> 한 문장에 한 가지 판단</div>
+            <div><strong>② 명료성:</strong> 참가자가 쉽게 이해</div>
+            <div><strong>③ 자기참조성:</strong> 내 관점으로 답변</div>
+            <div><strong>④ 변별성:</strong> 상식 문장 배제</div>
+            <div><strong>⑤ 비중복성:</strong> 유사 문장 제거</div>
+            <div><strong>⑥ 균형성:</strong> 특정 가치 과잉 방지</div>
+            <div><strong>⑦ 비유도성:</strong> 정답 암시 금지</div>
+            <div style="color:var(--accent-coral);"><strong>★ 핵심:</strong> 사실이 아닌 <strong>의견</strong>이어야 함!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: 5-STEP STRUCTURED REDUCTION CASE -->
+    <div class="slide" data-slide="4">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 2. 연구 설계 실전 사례</span>
+          <h2 class="slide-title">Q모집단에서 Q표본 36개로 축약하는 과정</h2>
+          <p class="slide-subtitle">Chapter 12. Crisis Management 사례를 활용한 구조적 축약 과정</p>
+        </div>
+        <div style="text-align: right; font-size: 0.8rem; color: var(--gray-400); font-weight: 600;">
+          Graduate Research Methods<br/>Subjectivity · Perspective · Structured Reduction
+        </div>
+      </div>
+      <div class="slide-body" style="gap: 14px;">
+        <!-- 5-Step Pipeline Flow -->
+        <div class="reduction-flow">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-card-header">1. 연구목적·연구질문 설정</div>
+            <div class="step-card-body">
+              <div class="step-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+              <div class="step-quote">“전략적 위기관리를 위해 무엇을 우선해야 하는가?”</div>
+              <ul class="step-bullets">
+                <li>연구목적과 연구질문을 먼저 확정</li>
+                <li>Q표본은 연구질문에 답할 수 있어야 함</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-card-header">2. Q모집단 구성</div>
+            <div class="step-card-body">
+              <div class="step-icon"><i class="fa-solid fa-copy"></i></div>
+              <div class="step-count">129개</div>
+              <ul class="step-bullets">
+                <li>Chapter 12에서 판단·가치·우선순위 진술 추출</li>
+                <li>단순 사실문장은 제외</li>
+                <li>위기관리 관련 주관적 관점의 풀(pool) 확보</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-card-header">3. 1차 축약</div>
+            <div class="step-card-body">
+              <div class="step-icon"><i class="fa-solid fa-filter"></i></div>
+              <div class="step-count">60개</div>
+              <ul class="step-bullets">
+                <li>연구목적 관련성 검토</li>
+                <li>내용타당도 중심 1차 정리</li>
+                <li>중복·사실문장·주제 이탈 문장 제거</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <div class="step-card-header">4. 2차 축약</div>
+            <div class="step-card-body">
+              <div class="step-icon"><i class="fa-solid fa-file-magnifying-glass"></i></div>
+              <div class="step-count">44개</div>
+              <ul class="step-bullets">
+                <li>변별력 검토</li>
+                <li>긍정·부정 진술문 균형 점검</li>
+                <li>의미 중복 제거</li>
+                <li>범주별 대표 문장 선별</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+          <!-- Step 5 -->
+          <div class="step-card step-card-highlight">
+            <div class="step-card-header step-header-highlight">5. 최종 Q표본 확정</div>
+            <div class="step-card-body">
+              <div class="step-icon" style="color: var(--accent-coral);"><i class="fa-solid fa-bullseye"></i></div>
+              <div class="step-count" style="color: var(--primary);">36개</div>
+              <ul class="step-bullets">
+                <li>최종 기준 엄격 적용</li>
+                <li>연구질문 적합성 & 변별력</li>
+                <li>중복성 최소화 & 명료성</li>
+                <li>6대 범주별 대표성 완비</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom 3 Information Blocks -->
+        <div class="reduction-bottom-grid">
+          <!-- Left: 6 Categories -->
+          <div class="bottom-card">
+            <div class="bottom-card-header">
+              <i class="fa-solid fa-book-bookmark"></i> 구조 분류 범주 (6대 영역)
+            </div>
+            <div class="category-grid">
+              <span class="cat-pill">기본관점</span>
+              <span class="cat-pill">전략적 리더십</span>
+              <span class="cat-pill">위기 식별·의사결정</span>
+              <span class="cat-pill">조직역량</span>
+              <span class="cat-pill">위기소통</span>
+              <span class="cat-pill">전략적 회복</span>
+            </div>
+            <div class="cat-tag">CRISIS MANAGEMENT · MULTIPLE PERSPECTIVES</div>
+          </div>
+
+          <!-- Middle: 5 Selection Criteria -->
+          <div class="bottom-card">
+            <div class="bottom-card-header">
+              <i class="fa-solid fa-sliders"></i> 최종 선정 5대 기준
+            </div>
+            <div class="criteria-badges">
+              <div class="criteria-item">
+                <div class="criteria-icon-circle"><i class="fa-solid fa-clipboard-check"></i></div>
+                <span class="crit-num">1</span>
+                <span>연구질문 적합성</span>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-icon-circle"><i class="fa-solid fa-chart-column"></i></div>
+                <span class="crit-num">2</span>
+                <span>변별력</span>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-icon-circle"><i class="fa-solid fa-object-ungroup"></i></div>
+                <span class="crit-num">3</span>
+                <span>중복성 최소화</span>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-icon-circle"><i class="fa-solid fa-lightbulb"></i></div>
+                <span class="crit-num">4</span>
+                <span>명료성</span>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-icon-circle"><i class="fa-solid fa-users"></i></div>
+                <span class="crit-num">5</span>
+                <span>범주 대표성</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Core Message -->
+          <div class="bottom-card bottom-card-accent">
+            <div class="bottom-card-header" style="color: var(--primary);">
+              <i class="fa-solid fa-bullhorn" style="color: var(--accent);"></i> 핵심 메시지
+            </div>
+            <div class="reduction-quote">
+              "Q표본은 임의로 고르는 문항이 아니라,<br/>
+              <strong>연구목적과 연구질문에 맞추어<br/>구조적으로 축약한 결과</strong>이다."
+            </div>
+            <div style="font-size: 0.72rem; color: var(--gray-400); text-align: right; margin-top: 4px; font-weight: 600;">
+              PEOPLE · PERSPECTIVES · BETTER CRISIS MANAGEMENT
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: FORCED DISTRIBUTION & Q-SORTING -->
+    <div class="slide" data-slide="5">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 3. 자료 수집</span>
+          <h2 class="slide-title">피라미드 강제분포와 Q-소팅(Q-Sorting)</h2>
+          <p class="slide-subtitle">왜 강제정규분포인가? — 치열한 가치 타협(Trade-off)을 통한 조작적 주관성 도출</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="pyramid-vis">
+          <div class="pyr-col">
+            <div class="pyr-header neg">-4 (2)</div>
+            <div class="pyr-cell active-neg"></div>
+            <div class="pyr-cell active-neg"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header neg">-3 (3)</div>
+            <div class="pyr-cell active-neg"></div>
+            <div class="pyr-cell active-neg"></div>
+            <div class="pyr-cell active-neg"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header neg">-2 (4)</div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header neg">-1 (5)</div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header zero">0 (8)</div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header pos">+1 (5)</div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header pos">+2 (4)</div>
+            <div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div><div class="pyr-cell"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header pos">+3 (3)</div>
+            <div class="pyr-cell active-pos"></div>
+            <div class="pyr-cell active-pos"></div>
+            <div class="pyr-cell active-pos"></div>
+          </div>
+          <div class="pyr-col">
+            <div class="pyr-header pos">+4 (2)</div>
+            <div class="pyr-cell active-pos"></div>
+            <div class="pyr-cell active-pos"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-scale-unbalanced"></i> 강제정규분포의 심리학적 본질</div>
+            <p>리커트 척도의 '모두 다 동의함(관대화 오류)'을 원천 차단합니다. 한정된 슬롯 안에서 <strong>"무엇을 끝까지 지키고, 무엇을 기꺼이 포기할 것인가?"</strong>라는 응답자 내면의 치열한 가치 타협을 강제합니다.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-microphone"></i> 사후 심층 인터뷰의 결정적 역할</div>
+            <p>피라미드 배치가 끝난 뒤 <strong>"+4와 -4를 선택한 구체적 이유"</strong>를 반드시 청취합니다. 이 정성적 텍스트가 통계적 수치에 인문학적 생명력을 불어넣는 결정적 해석 근거가 됩니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ANALYSIS & ROTATION -->
+    <div class="slide" data-slide="6">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 4. 통계와 분석</span>
+          <h2 class="slide-title">분석은 어떻게 수행하는가? — PCA와 요인회전</h2>
+          <p class="slide-subtitle">사람 간 상관행렬 ➔ 주성분분석(PCA) ➔ 배리맥스(Varimax) 회전의 마술</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-arrows-to-circle"></i> 주성분분석(PCA)의 역할</div>
+            <p>• <strong>P-표본 간 상관행렬:</strong> 응답자 A와 B의 피라미드 배열 유사성 계산.<br/>
+            • <strong>차원 축소 & 분산 최대 보존:</strong> 복잡한 수십 명의 배열을 2~4개의 핵심 공유 관점(요인)으로 압축 요약.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> 왜 요인회전(Varimax)을 하는가?</div>
+            <p>• <strong>단순 구조화(Simple Structure):</strong> 각 응답자가 하나의 요인에만 뚜렷하게 걸리도록 좌표축을 회전.<br/>
+            • <em>"착시 그림(개구리-말)처럼, 데이터를 왜곡하는 것이 아니라 <strong>해석하기 가장 쉬운 각도</strong>에서 관점을 읽는 작업!"</em></p>
+          </div>
+        </div>
+
+        <div class="card" style="background:#eff6ff; border-color:#bfdbfe;">
+          <div class="card-title" style="color:var(--primary); font-size:1.05rem;"><i class="fa-solid fa-list-check"></i> Q-분석 출력표에서 확인하는 5대 핵심 지표</div>
+          <div class="grid-3" style="font-size:0.88rem; margin-top:5px;">
+            <div><strong>① 고유값 & 설명분산:</strong> 요인의 대표성</div>
+            <div><strong>② 요인적재치(Factor Loading):</strong> 소속도</div>
+            <div><strong>③ 정의 Q-분류(X):</strong> 요인을 대표하는 인물</div>
+            <div><strong>④ 표준화 Z-Score:</strong> 진술문별 동의 강도</div>
+            <div><strong>⑤ 구분 진술문:</strong> 유형 간 갈등 쟁점</div>
+            <div><strong>⑥ 합의 진술문:</strong> 모두가 공유하는 보편 가치</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: CONTEMPORARY PRACTICE -->
+    <div class="slide" data-slide="7">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 5. 실습 패러다임</span>
+          <h2 class="slide-title">현대적 Q-분석 실습: R Studio vs AI 에이전트</h2>
+          <p class="slide-subtitle">과거의 고통스러운 코딩 디버깅에서 ➔ AI를 활용한 신속하고 정확한 연구 자동화로</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Track A -->
+          <div class="card" style="border-top: 4px solid var(--accent);">
+            <div class="card-title" style="color:var(--accent);"><i class="fa-brands fa-r-project"></i> Track A. R Studio 실행 트랙</div>
+            <p style="font-size:0.9rem;"><strong>연구자 직접 제어형 워크플로우</strong></p>
+            <ul style="margin-left: 18px; font-size:0.88rem; line-height:1.6; color:var(--gray-700);">
+              <li><strong>🚨 핵심 성공 요건:</strong> AI 프롬프트에 <strong>데이터 스키마(변수명)</strong>를 반드시 사전 명시!</li>
+              <li>변수명(`scoresArray`, `respondent$id`)을 알려주지 않으면 AI가 가상 변수를 지어내어 R 실행 시 에러 폭발.</li>
+              <li>스키마 기반 프롬프트로 100% 무오류 R 스크립트 도출 ➔ RStudio `Source` 원클릭 실행 ➔ CSV 산출.</li>
+            </ul>
+          </div>
+
+          <!-- Track B -->
+          <div class="card" style="border-top: 4px solid var(--accent-coral);">
+            <div class="card-title" style="color:var(--accent-coral);"><i class="fa-solid fa-robot"></i> Track B. 로컬 AI 에이전트 전임 트랙</div>
+            <p style="font-size:0.9rem;"><strong>완전 자동화 차세대 워크플로우</strong></p>
+            <ul style="margin-left: 18px; font-size:0.88rem; line-height:1.6; color:var(--gray-700);">
+              <li><strong>차세대 로컬 에이전트:</strong> Claude Code, Google Antigravity, OpenAI Codex 등.</li>
+              <li>단순 챗봇과 달리 <strong>로컬 파일 직접 접근 + 터미널 R 실행 + 패키지(`qmethod`) 자가 설치</strong> 능력 보유.</li>
+              <li>"labs/data 폴더 분석해줘" 한마디로 ➔ 통계 계산 + 질적 인터뷰 융합 ➔ <strong>학위논문급 종합 HTML 리포트 5분 만에 완성!</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="quote-banner" style="background: linear-gradient(135deg, #0f172a, #334155); padding:16px 24px;">
+          <i class="fa-solid fa-lightbulb" style="color:#fbbf24; font-size:1.8rem;"></i>
+          <div style="font-size:1rem;">
+            "복잡한 코딩, 패키지 설치, 데이터 변환의 고통은 로컬 AI 에이전트에게 맡기고,<br/>
+            연구자는 <strong>'이 관점 유형이 학문과 실무에 어떤 의미를 갖는가?'</strong>라는 본질적 통찰에만 집중할 수 있습니다."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: VALUE & CONCLUSION -->
+    <div class="slide" data-slide="8">
+      <div class="slide-header">
+        <div>
+          <span class="slide-badge">Part 6. 맺음말</span>
+          <h2 class="slide-title">왜 우리는 Q-방법론을 연구해야 하는가?</h2>
+          <p class="slide-subtitle">다수결의 횡포를 넘어, 인간 주관성의 지형도를 완성하는 가치</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-bullhorn" style="color:#e11d48;"></i> 소수 의견의 온전한 보존</div>
+            <p>일반 설문조사의 '평균값'에 묻혀 사라져 버리는 소수 전문가의 독특하고 깊이 있는 신념도 <strong>당당한 하나의 독립된 유형(Type)</strong>으로 규명됩니다.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-puzzle-piece" style="color:#2563eb;"></i> 양적 통계와 질적 해석의 융합</div>
+            <p>주성분분석과 Z-점수라는 <strong>계량적 객관성</strong> 위에, 심층 인터뷰라는 <strong>인문학적 깊이</strong>가 완벽하게 결합된 가장 이상적인 혼합연구 방법론입니다.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-compass" style="color:#10b981;"></i> 갈등 관리와 정책 합의의 나침반</div>
+            <p>집단 간 극명한 인식 차이를 보여주는 <strong>구별 진술문</strong>으로 갈등의 진원지를 찾고, 모두가 동의하는 <strong>합의 진술문</strong>을 통해 타협의 지점을 제시합니다.</p>
+          </div>
+        </div>
+
+        <div class="quote-banner" style="margin-top:10px;">
+          <i class="fa-solid fa-heart" style="color:#f43f5e;"></i>
+          <div>
+            ❝ Q-방법론은 대상을 평가하는 잣대가 아니라,<br/>
+            <strong>사람의 마음속에 존재하는 다원적 세계관을 세상 밖으로 펼쳐 보여주는 '주관성의 지도(Map of Subjectivity)'이다.</strong> ❞
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Speaker Notes Drawer (Toggled by 'N' key or button) -->
+  <div class="speaker-notes-drawer" id="speakerNotesDrawer">
+    <div class="notes-header">
+      <span class="notes-title"><i class="fa-solid fa-microphone"></i> 발표자 대본 (Speaker Note)</span>
+      <span style="font-size:0.8rem; color:#94a3b8;">단축키: 'N' 키로 열기/닫기</span>
+    </div>
+    <div class="notes-content" id="speakerNotesText">
+      대본이 로드됩니다...
+    </div>
+  </div>
+
+  <!-- Deck Footer Controls -->
+  <footer class="deck-footer">
+    <div class="slide-counter">
+      SLIDE <span id="currentSlideNum">0</span> / <span id="totalSlideNum">8</span>
+    </div>
+
+    <div class="deck-controls">
+      <button class="btn-ctrl btn-speaker" id="btnToggleNotes" title="발표자 대본 보기 (단축키 N)">
+        <i class="fa-solid fa-comment-dots"></i> 발표 대본 (N)
+      </button>
+      <button class="btn-ctrl" id="btnPrev" title="이전 슬라이드 (단축키 ←)">
+        <i class="fa-solid fa-arrow-left"></i> 이전
+      </button>
+      <button class="btn-ctrl" id="btnNext" title="다음 슬라이드 (단축키 → / Space)">
+        다음 <i class="fa-solid fa-arrow-right"></i>
+      </button>
+      <button class="btn-ctrl" id="btnFullscreen" title="전체화면 (단축키 F)">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Speaker Notes Database from Q방법론 발표준비.md
+  const SPEAKER_SCRIPTS = [
+    // Slide 0: Title
+    `"안녕하십니까, 동아대학교 재난관리학과 원우 여러분. 오늘 저는 사람의 내면적 생각과 가치관을 과학적으로 분석하는 독자적 방법론, 『Q-방법론의 이론과 실제』에 대해 발표를 맡은 강석균입니다. 오늘 세미나를 통해 Q의 철학적 기원부터 연구 설계, 피라미드 소팅, 그리고 최신 AI를 활용한 분석 실습까지 그 전체적인 지도를 알기 쉽게 설명해 드리겠습니다."`,
+
+    // Slide 1: Origin & Stephenson
+    `"원우 여러분, 우리는 보통 '통계'라고 하면 설문조사의 평균, 표준편차, 가설검정을 떠올립니다. 하지만 사람의 생각, 신념, 가치관 같은 '주관성(Subjectivity)'도 과학적으로 측정할 수 있을까요? 1935년, 찰스 스피어먼의 제자이자 물리학과 심리학 박사 학위를 모두 가졌던 윌리엄 스티븐슨(William Stephenson)은 혁명적인 질문을 던졌습니다. '왜 우리는 검사 문항만 상관시키고, 정작 중요한 사람의 관점은 상관시키지 않는가?' 이것이 바로 Q-방법론의 출발입니다. 1953년 독자적 체계화를 거쳐, 1980년대 스티븐 브라운을 통해 인간의 주관적 신념체계를 있는 그대로 과학화하는 독보적 연구 틀로 확립되었습니다."`,
+
+    // Slide 2: R vs Q
+    `"Q방법론을 가장 쉽게 이해하는 방법은 일반 설문조사, 즉 R-방법론과 비교하는 것입니다. 일반 설문조사는 대규모 사람(N)에게 문항(V)을 던져 문항 간의 관계를 봅니다. 즉 '사람이 표본'이므로 표본이 수백 명이어야 합니다. 반면 Q는 정반대입니다. '생각(진술문)이 표본'이고 사람은 변수(Variable)가 됩니다. 사람을 수백 명 모으는 것이 아니라 세상의 다양한 관점을 표본 추출하여 한 사람 한 사람에게 우선순위를 매기게 합니다. 그래서 Q에서는 20~30명의 소규모 표본만으로도 사회에 존재하는 뚜렷한 '신념의 유형'을 완벽히 규명할 수 있습니다."`,
+
+    // Slide 3: Concourse & Statements
+    `"그렇다면 연구자는 질문지를 어떻게 만들까요? Q에서는 설문 문항 대신 'Q-진술문'을 만듭니다. 가장 먼저 하는 작업은 '콘코스(Concourse)'를 모으는 것입니다. 콘코스란 특정 주제에 대해 세상 사람들이 나누는 모든 대화, 문헌, 기사를 총망라하는 작업입니다. 그 다음 이론적 매트릭스를 만들어 30~50개 내외의 진술문으로 압축합니다. 여기서 가장 중요한 규칙은 진술문이 시험 문제처럼 '참/거짓을 가리는 사실'이어서는 안 되며, '개인의 가치관에 따라 호불호가 갈리는 주관적 의견'이어야 한다는 점입니다."`,
+
+    // Slide 4: Structured Case Study (Reduction Pipeline)
+    `"원우 여러분, 그렇다면 실제로 수백 개의 말 속에서 어떻게 36개의 정예 진술문을 뽑아낼까요? 실제 『Crisis Management』 사례를 바탕으로 진행된 5단계 구조적 축약 과정을 보여드리겠습니다. 첫 번째 단계는 연구질문의 명확화입니다. '전략적 위기관리를 위해 우리는 무엇을 우선해야 하는가?'라는 핵심 질문을 먼저 세웁니다. 두 번째 단계에서 129개의 Q-모집단 풀(pool)을 구성합니다. 단순 사실 기술 문장은 모두 쳐내고, 전문가들의 가치판단과 우선순위가 갈리는 문장 129개를 발췌했습니다. 세 번째 단계인 1차 축약에서 내용타당도 기준으로 중복과 주제이탈 문장을 제거하여 60개로 줄이고, 네 번째 단계인 2차 축약에서 긍정·부정의 균형과 변별력을 검토하여 44개로 좁힙니다. 그리고 마지막 5단계에서 하단에 보시는 리더십, 의사결정, 소통 등 6대 구조 분류 범주를 아우르며, 5대 기준(적합성, 변별력, 비중복성, 명료성, 범주 대표성)을 통과한 최종 36개의 Q-표본을 확정합니다. 즉 Q-진술문은 연구자가 임의로 고른 것이 아니라, 연구목적에 맞추어 벼려낸 구조적 축약의 결과물입니다."`,
+
+    // Slide 5: Forced Sorting
+    `"진술문이 완성되면 응답자에게 피라미드 형태의 격자판에 카드를 배치하는 'Q-소팅'을 시킵니다. 여기서 핵심은 '강제정규분포'입니다. 가장 동의하는 (+4) 칸에는 딱 2장, 가장 비동의하는 (-4) 칸에도 딱 2장만 넣을 수 있습니다. '이것도 중요하고 저것도 중요한데 왜 2장만 넣어야 합니까?'라는 불평이 나올 수 있습니다. 바로 그 갈등을 유도하는 것이 Q의 목적입니다! 자원이 한정된 현실 세계처럼, 응답자가 스스로 자신의 가치관을 치열하게 저울질하며 '가장 포기할 수 없는 것'과 '가장 버릴 수 있는 것'을 결정하도록 강제하는 것입니다."`,
+
+    // Slide 6: PCA & Rotation
+    `"수집된 피라미드 배치는 통계 프로그램에서 어떻게 처리될까요? Q-분석은 '사람 간의 상관행렬'에서 시작합니다. A와 B의 배치가 얼마나 일치하는지를 계산한 뒤, 주성분 분석(PCA)으로 핵심 요인을 추출하고 배리맥스(Varimax) 직교 회전을 통해 독립적인 유형들로 분리합니다. 회전은 착시 그림(개구리-말)처럼 데이터를 왜곡하는 것이 아니라 '해석하기 가장 쉬운 각도'에서 관점을 읽는 작업입니다. 분석이 끝나면 표준화 Z-점수와 질적 인터뷰를 결합하여 유형을 명명하고 프로파일링을 완성하게 됩니다."`,
+
+    // Slide 7: Contemporary Practice
+    `"과거에는 DOS용 PQMethod나 RStudio에서 코드를 짜다가 인코딩 에러와 문법 오류로 며칠 밤을 새우곤 했습니다. 하지만 지금은 생성형 AI 덕분에 패러다임이 완전히 바뀌었습니다. Track A에서는 프롬프트에 내 JSON의 변수명(scoresArray 등)을 정확히 명시해주면 AI가 1초의 수정도 필요 없는 100% 무오류 R 스크립트를 짜줍니다. 나아가 Track B에서는 Claude Code나 Google Antigravity 같은 로컬 AI 에이전트에게 데이터 폴더만 지정해주면, 에이전트가 로컬 데이터를 읽고 R을 실행하며 패키지 설치부터 학위논문급 종합 HTML 리포트까지 5분 만에 완성해 냅니다. 연구자는 코딩의 고통에서 벗어나 가치 해석에만 집중할 수 있게 되었습니다."`,
+
+    // Slide 8: Conclusion
+    `"전통적 설문조사는 대세를 확인하는 데 유리하지만 소수의 깊은 통찰은 '평균'에 가려져 사라집니다. 하지만 Q-방법론에서는 단 한두 명의 소수 의견이라도 일관된 논리가 있다면 당당히 독립된 유형으로 나타납니다. 또한 갈등이 첨예한 공공 정책 분야에서 각 집단이 왜 서로를 이해하지 못하는지 '구별 진술문'으로 짚어내고, '합의 진술문'으로 타협의 실마리를 제공합니다. 사람의 마음속에 존재하는 다원적 세계관을 펼쳐 보여주는 이 아름다운 Q-방법론을 꼭 활용해 보시길 바랍니다. 감사합니다."`
+  ];
+
+  let currentSlide = 0;
+  const totalSlides = 8;
+  const slides = document.querySelectorAll('.slide');
+  const progressBar = document.getElementById('progressBar');
+  const currentSlideNum = document.getElementById('currentSlideNum');
+  const totalSlideNum = document.getElementById('totalSlideNum');
+  const speakerNotesDrawer = document.getElementById('speakerNotesDrawer');
+  const speakerNotesText = document.getElementById('speakerNotesText');
+  const btnToggleNotes = document.getElementById('btnToggleNotes');
+
+  totalSlideNum.innerText = totalSlides;
+
+  function updateSlide(index) {
+    if (index < 0) index = 0;
+    if (index > totalSlides) index = totalSlides;
+    currentSlide = index;
+
+    slides.forEach((s, idx) => {
+      s.classList.toggle('active', idx === currentSlide);
+    });
+
+    currentSlideNum.innerText = currentSlide;
+    const progressPercent = (currentSlide / totalSlides) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+
+    // Update Speaker Note
+    speakerNotesText.innerText = SPEAKER_SCRIPTS[currentSlide] || "대본 없음";
+  }
+
+  function nextSlide() {
+    if (currentSlide < totalSlides) updateSlide(currentSlide + 1);
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) updateSlide(currentSlide - 1);
+  }
+
+  function toggleNotes() {
+    speakerNotesDrawer.classList.toggle('open');
+    btnToggleNotes.classList.toggle('active');
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // Event Listeners
+  document.getElementById('btnNext').addEventListener('click', nextSlide);
+  document.getElementById('btnPrev').addEventListener('click', prevSlide);
+  btnToggleNotes.addEventListener('click', toggleNotes);
+  document.getElementById('btnFullscreen').addEventListener('click', toggleFullscreen);
+
+  // Keyboard Navigation
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'n' || e.key === 'N') {
+      toggleNotes();
+    } else if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
+    }
+  });
+
+  // Initialize
+  updateSlide(0);
+</script>
+
+</body>
+</html>
