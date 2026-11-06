@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FEMA NIMS 2017 & Q-방법론 종합 연구 포털</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #0f172a;
+      --primary-light: #3b82f6;
+      --accent: #2563eb;
+      --accent-coral: #f43f5e;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --bg-page: #0b0f19;
+      --bg-surface: #131b2e;
+      --bg-surface-hover: #1a243d;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.3);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Background Glow */
+    .bg-glow {
+      position: fixed;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.22) 0%, rgba(244, 63, 94, 0.08) 50%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Section */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 30px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 2.85rem;
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    /* Section Headings */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* Featured Presentation Banner */
+    .featured-banner {
+      background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 50%, #2563eb 100%);
+      border: 1px solid rgba(147, 197, 253, 0.3);
+      border-radius: 20px;
+      padding: 38px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 60px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-banner::before {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.25) 0%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .featured-info {
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+
+    .featured-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #fde047;
+      background: rgba(253, 224, 71, 0.15);
+      border: 1px solid rgba(253, 224, 71, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .featured-title {
+      font-size: 1.95rem;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .featured-desc {
+      font-size: 1.02rem;
+      color: #cbd5e1;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .featured-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 0.9rem;
+      color: #93c5fd;
+    }
+
+    .btn-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .btn-launch:hover {
+      transform: translateY(-2px);
+      background: #f8fafc;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+      color: var(--accent);
+    }
+
+    /* Subnotes Grid */
+    .grid-subnotes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .subnote-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subnote-card:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chapter-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .card-arrow {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+    }
+
+    .subnote-card:hover .card-arrow {
+      color: #93c5fd;
+      transform: translateX(4px);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      line-height: 1.4;
+    }
+
+    .card-title-en {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 3px;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .card-tag {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Labs & Tools Grid */
+    .grid-labs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .lab-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .lab-card:hover {
+      background: var(--bg-surface-hover);
+      border-color: rgba(16, 185, 129, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .lab-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .lab-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .lab-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 80px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .featured-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 24px;
+      }
+      .btn-launch {
+        width: 100%;
+        justify-content: center;
+      }
+      .hero-title {
+        font-size: 2.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="container">
+  <!-- Header -->
+  <header class="hero-section">
+    <div class="hero-badge">
+      <i class="fa-solid fa-shield-halved"></i> FEMA NIMS 2017 & 주관성 연구 방법론
+    </div>
+    <h1 class="hero-title">재난지휘관리 & Q-방법론 연구 포털</h1>
+    <p class="hero-subtitle">
+      미국 연방 재난관리청(FEMA) NIMS 2017 핵심 교리 8대 챕터 및 부록 서브노트와,<br/>
+      주관성 연구(Q-방법론) 데이터 입력부터 로컬 AI 에이전트 기반 자동 산출까지의 실전 프레젠테이션 허브
+    </p>
+  </header>
+
+  <!-- Featured Presentation -->
+  <section>
+    <div class="featured-banner">
+      <div class="featured-info">
+        <span class="featured-tag">
+          <i class="fa-solid fa-sparkles"></i> LATEST PRESENTATION · PART 2
+        </span>
+        <h2 class="featured-title">Q-방법론 알기 쉽게 설명하기<br/>: 데이터 입력부터 산출까지 실전 노하우</h2>
+        <p class="featured-desc">
+          DOS(PQMethod) 수동 입력과 RStudio 코딩 수정의 장벽을 넘어, 
+          <strong>PC에 설치된 R + 로컬 AI 에이전트(Claude Code · Codex · Antigravity)</strong>에게 역할을 위임하여 무오류로 통계표를 산출하는 최신 발표 슬라이드입니다.
+        </p>
+        <div class="featured-meta">
+          <span><i class="fa-solid fa-user-tie"></i> 발표자: 강석균</span>
+          <span><i class="fa-solid fa-chalkboard-user"></i> 총 8개 슬라이드 & 발표 대본(N)</span>
+          <span><i class="fa-solid fa-keyboard"></i> 키보드 단축키 지원</span>
+        </div>
+      </div>
+      <a href="Q방법론 발표준비/Q_Methodology_Presentation.html" class="btn-launch">
+        <i class="fa-solid fa-play"></i> 슬라이드 보기 (Fullscreen)
+      </a>
+    </div>
+  </section>
+
+  <!-- FEMA NIMS 2017 Subnotes Section -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+        <i class="fa-solid fa-book-bookmark"></i>
+      </div>
+      <h2 class="section-title">FEMA NIMS 2017 정밀 분석 서브노트</h2>
+      <span class="section-desc">총 8개 챕터 + ICS/EOC 통합 부록</span>
+    </div>
+
+    <div class="grid-subnotes">
+      <!-- Chapter 1 -->
+      <a href="subnotes/chapter1-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 1</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">NIMS의 기본 원리와 핵심 개념</h3>
+          <div class="card-title-en">I. Fundamentals and Concepts of NIMS</div>
+        </div>
+        <p class="card-desc">유연성(Flexibility)과 표준화(Standardization), 전 공동체(Whole Community) 접근법 및 3대 핵심 빌딩 블록 총괄.</p>
+        <div class="card-tags">
+          <span class="card-tag">지도 원칙</span>
+          <span class="card-tag">3대 빌딩 블록</span>
+          <span class="card-tag">한국적 시사점</span>
+        </div>
+      </a>
+
+      <!-- Chapter 2 -->
+      <a href="subnotes/chapter2-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 2</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">자원 관리</h3>
+          <div class="card-title-en">II. Resource Management</div>
+        </div>
+        <p class="card-desc">사건 이전 자원 식별·유형화(Resource Typing) 및 자격인증(Credentialing), 상호응원협정(EMAC), 자원 관리 사이클 6단계.</p>
+        <div class="card-tags">
+          <span class="card-tag">자원 유형화</span>
+          <span class="card-tag">NQS 자격인증</span>
+          <span class="card-tag">자원 동원 해제</span>
+        </div>
+      </a>
+
+      <!-- Chapter 3 -->
+      <a href="subnotes/chapter3-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 3</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">지휘 및 조정</h3>
+          <div class="card-title-en">III. Command and Coordination</div>
+        </div>
+        <p class="card-desc">NIMS 지휘구조의 핵심: 현장지휘체계(ICS), 비상운영센터(EOC), 다기관조정그룹(MAC Group), 합동정보체계(JIS)의 유기적 연계.</p>
+        <div class="card-tags">
+          <span class="card-tag">14대 관리특성</span>
+          <span class="card-tag">통합지휘(UC)</span>
+          <span class="card-tag">플래닝 P</span>
+          <span class="card-tag">EOC 모델</span>
+        </div>
+      </a>
+
+      <!-- Chapter 4 -->
+      <a href="subnotes/chapter4-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 4</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">통신 및 정보 관리</h3>
+          <div class="card-title-en">IV. Communications and Information Management</div>
+        </div>
+        <p class="card-desc">통신 상호운용성(Interoperability), 공통 어휘(Plain Language) 원칙, 공통작전상황도(COP) 구축 및 데이터 보안 체계.</p>
+        <div class="card-tags">
+          <span class="card-tag">상호운용성</span>
+          <span class="card-tag">Plain Language</span>
+          <span class="card-tag">COP 공유</span>
+        </div>
+      </a>
+
+      <!-- Chapter 5 -->
+      <a href="subnotes/chapter5-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 5</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">결론 및 지속적 발전</h3>
+          <div class="card-title-en">V. Conclusion</div>
+        </div>
+        <p class="card-desc">NIMS 행동교리의 발전적 유지관리, 교육훈련 및 훈련평가 프로그램(HSEEP), 사후검토(AAR) 및 개선계획(IP) 피드백 기제.</p>
+        <div class="card-tags">
+          <span class="card-tag">HSEEP 훈련</span>
+          <span class="card-tag">사후검토보고(AAR)</span>
+          <span class="card-tag">지속적 환류</span>
+        </div>
+      </a>
+
+      <!-- Chapter 6 -->
+      <a href="subnotes/chapter6-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 6</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">공식 용어해설</h3>
+          <div class="card-title-en">VI. Glossary of Key Terms</div>
+        </div>
+        <p class="card-desc">NIMS 2017 본문에 수록된 핵심 재난관리 학술·실무 용어 100여 종에 대한 정밀 한영 대조 및 상세 해설.</p>
+        <div class="card-tags">
+          <span class="card-tag">용어 사전</span>
+          <span class="card-tag">학술 개념</span>
+          <span class="card-tag">한영 대조</span>
+        </div>
+      </a>
+
+      <!-- Chapter 7 -->
+      <a href="subnotes/chapter7-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 7</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">약어 및 두문자 목록</h3>
+          <div class="card-title-en">VII. List of Abbreviations and Acronyms</div>
+        </div>
+        <p class="card-desc">ICS, EOC, MACS, COP, JIS, AHJ, NQS 등 FEMA 재난관리 체계에서 빈번히 사용되는 공식 약어집 총정리.</p>
+        <div class="card-tags">
+          <span class="card-tag">공식 약어</span>
+          <span class="card-tag">기구 명칭</span>
+          <span class="card-tag">표준 색인</span>
+        </div>
+      </a>
+
+      <!-- Chapter 8 -->
+      <a href="subnotes/chapter8-subnote.html" class="subnote-card">
+        <div class="card-top">
+          <span class="chapter-badge">Chapter 8</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">법령 및 지침 참고자료</h3>
+          <div class="card-title-en">VIII. Resources and Authorities</div>
+        </div>
+        <p class="card-desc">스태포드법(Stafford Act), 대통령지침(HSPD-5, PPD-8), 국가지원체계(NRF) 등 NIMS의 법적 토대 및 연계 가이드라인.</p>
+        <div class="card-tags">
+          <span class="card-tag">Stafford Act</span>
+          <span class="card-tag">대통령안보훈령</span>
+          <span class="card-tag">법적 권한</span>
+        </div>
+      </a>
+
+      <!-- Appendix -->
+      <a href="subnotes/appendix-subnote.html" class="subnote-card" style="border-color: rgba(244, 63, 94, 0.3);">
+        <div class="card-top">
+          <span class="chapter-badge" style="background: rgba(244, 63, 94, 0.15); color: #fb7185; border-color: rgba(244, 63, 94, 0.3);">Appendix A & B</span>
+          <i class="fa-solid fa-arrow-right card-arrow"></i>
+        </div>
+        <div>
+          <h3 class="card-title">부록: ICS 및 EOC 실무 지침</h3>
+          <div class="card-title-en">Appendix A (ICS) & Appendix B (EOC)</div>
+        </div>
+        <p class="card-desc">ICS 10대 탭(Tab 1~10), 조직 요소 공식 명칭, 플래닝 P 사이클, ICS 표준 서식 18종 및 3대 EOC 조직 모델(ICS유사형/ISM/부서별).</p>
+        <div class="card-tags">
+          <span class="card-tag">ICS 10대 탭</span>
+          <span class="card-tag">ICS 표준서식</span>
+          <span class="card-tag">EOC 3대 구조</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Interactive Labs & Research Tools -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+        <i class="fa-solid fa-flask"></i>
+      </div>
+      <h2 class="section-title">실증 분석 및 Q-소팅 실습 도구 (Labs)</h2>
+      <span class="section-desc">웹 애플리케이션 및 분석 보고서</span>
+    </div>
+
+    <div class="grid-labs">
+      <a href="labs/NIMS_Q_Sorting_App_강석균.html" class="lab-card">
+        <div class="lab-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h3 class="lab-title">웹 기반 Q-소팅 앱 (36문항)</h3>
+        <p class="lab-desc">마우스 드래그 앤 드롭으로 9점 척도(-4~+4) 강제분포 배치 및 질적 인터뷰 JSON 자동 생성 도구.</p>
+      </a>
+
+      <a href="labs/NIMS_Q_Methodology_Analysis_Report.html" class="lab-card">
+        <div class="lab-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <h3 class="lab-title">Q-방법론 실증 통계 분석 리포트</h3>
+        <p class="lab-desc">qmethod 및 psych 기반 P-상관행렬, 요인부하량, Z-점수 및 질적 인터뷰 매칭 종합 분석 보고서.</p>
+      </a>
+
+      <a href="labs/NIMS_Disaster_Management_Q_Proposal.html" class="lab-card">
+        <div class="lab-icon"><i class="fa-solid fa-file-contract"></i></div>
+        <h3 class="lab-title">재난지휘관리원칙 연구계획서</h3>
+        <p class="lab-desc">NIMS 현장지휘 원칙에 관한 전문가 인식 유형화(Q방법론) 학위논문 연구 제안서 및 층화 표본 설계안.</p>
+      </a>
+
+      <a href="labs/NIMS_Uiryeong_Q_Methodology_Research_Proposal.html" class="lab-card">
+        <div class="lab-icon"><i class="fa-solid fa-building-shield"></i></div>
+        <h3 class="lab-title">의령소방서 현장지휘 연구계획서</h3>
+        <p class="lab-desc">지방 소방서 현장지휘대 및 출동대원 관점의 다차원적 성과 지표 도출 및 주관성 실증 연구 설계.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>FEMA NIMS (National Incident Management System, 3rd Edition, 2017) Academic Subnotes & Research Portal</p>
+    <p style="margin-top: 6px; font-size: 0.82rem;">Designed for Graduate Research Seminar in Disaster Incident Command & Q-Methodology</p>
+  </footer>
+</div>
+
+</body>
+</html>
